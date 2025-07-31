@@ -1,0 +1,1 @@
+Wiederverwendbare UI-Komponenten (Spielbrett, Würfel etc.)
