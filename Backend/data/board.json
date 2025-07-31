@@ -1,1 +1,12 @@
-// Spielfelder und Events
+[
+  { "type": "empty", "description": "Du startest deine Reise im Cyberspace." },
+  { "type": "malware", "description": "⚠️ Malware entdeckt – du verlierst 2 Datenpunkte.", "effect": -2 },
+  { "type": "question", "description": "Was ist ein Hash?", "question": "Was ist ein Hash?", "answer": "eine Prüfsumme" },
+  { "type": "empty", "description": "Du hast ein Sicherheitsupdate installiert." },
+  { "type": "malware", "description": "⚠️ Ransomware-Angriff! -3 Datenpunkte!", "effect": -3 },
+  { "type": "question", "description": "Was macht eine Firewall?", "question": "Was macht eine Firewall?", "answer": "filtert Netzwerkverkehr" },
+  { "type": "empty", "description": "Du bewegst dich unentdeckt durchs Netzwerk." },
+  { "type": "empty", "description": "Alles ruhig im System." },
+  { "type": "malware", "description": "⚠️ Keylogger entdeckt! -1 Datenpunkt", "effect": -1 },
+  { "type": "goal", "description": "🎯 Ziel erreicht – sicheres System betreten!" }
+]
