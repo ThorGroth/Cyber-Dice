@@ -1,0 +1,23 @@
+fastapi
+uvicorn
+annotated-types
+anyio
+blinker
+click
+colorama
+fastapi
+Flask
+h11
+idna
+itsdangerous
+Jinja2
+MarkupSafe
+pydantic
+pydantic_core
+sniffio
+starlette
+typing-inspection
+typing_extensions
+uvicorn
+Werkzeug
+# pip install -r requirements.txt
