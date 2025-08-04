@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
 import random
+import os
 
 from models import Player
 from services.board_loader import load_board
@@ -20,7 +21,7 @@ board = []
 async def lifespan(app: FastAPI):
     global board
     board = load_board()
-    prepare_event_pool(board)  # ← Events nach Typen einsortieren
+    prepare_event_pool(board)  #  Events nach Typen einsortieren
     print("Spielfeld geladen.")
     yield
     print("Server wird heruntergefahren.")
@@ -51,7 +52,7 @@ def roll_dice():
     roll = random.randint(1, 6)
     player.position += roll
 
-    field = get_current_field(player.position, len(board))  # ← Neue Methode
+    field = get_current_field(player.position, len(board))  # Neue Methode
     apply_event(player, field)
 
     return {
@@ -71,3 +72,13 @@ def get_status():
         "position": player.position,
         "data_points": player.data_points
     }
+
+@app.get("/rules")
+def get_rules():
+    path = os.path.join(os.path.dirname(__file__), "data", "rules.txt")
+    try:
+        with open(path, "r", encoding="utf-8") as file:
+            rules = file.read()
+        return {"rules": rules}
+    except FileNotFoundError:
+        return {"error": "Regelbuch nicht gefunden."}

@@ -1,0 +1,38 @@
+Cyber Dice – Regelbuch
+
+Ziel:
+Bewege dich durch 30 Felder im Cyberspace und erreiche das sichere Ziel, ohne alle Datenpunkte zu verlieren.
+
+Spielstart:
+- Du beginnst mit 5 Datenpunkten.
+- Dein Avatar startet auf Feld 0.
+
+Spielablauf:
+- Würfle eine Zahl zwischen 1 und 6.
+- Du bewegst dich entsprechend viele Felder vor.
+- Jedes Feld enthält ein zufälliges Ereignis:
+  - Malware: Du verlierst Datenpunkte.
+  - Frage/Rätsel: Beantworte richtig und erhalte Bonuspunkte.
+  - Leeres Feld: Nichts passiert.
+
+Ereignisse:
+1. **Malware**:
+   - Viren, Ransomware, Trojaner – du verlierst Datenpunkte.
+   - Effekt: −1 bis −3 Datenpunkte.
+
+2. **Fragen & Rätsel**:
+   - Themen: IT-Sicherheit, Netzwerke, Kryptografie, etc.
+   - Richtige Antwort: +1 Datenpunkt.
+   - Falsche Antwort: Kein Bonus.
+
+3. **Leere Felder**:
+   - Keine Auswirkung – du bist sicher weitergekommen.
+
+Spielende:
+- Du erreichst das Ziel → **gewonnen**.
+- Deine Datenpunkte fallen auf 0 oder darunter → **Game Over**.
+
+Hinweis:
+Du kannst jederzeit deinen Status über die API abrufen oder das Regelbuch öffnen, um dich zu informieren.
+
+Viel Erfolg im Cyberspace!
