@@ -8,7 +8,7 @@ const Board = ({ fields, playerPosition }) => {
       case 'empty': return 'bg-secondary'; // Grau
       case 'malware': return 'bg-danger'; // Rot
       case 'question': return 'bg-warning'; // Gelb
-      case 'riddle': return 'bg-warning'; // Gelb (Rätsel sind auch Fragen)
+      case 'riddle': return 'bg-warning'; // Gelb 
       case 'goal': return 'bg-success'; // Grün
       default: return 'bg-secondary';
     }
@@ -46,7 +46,7 @@ const Board = ({ fields, playerPosition }) => {
       {fields.map((field, index) => {
         return renderField(field, index);
       })}
-      {/* Würfel-Feld in der Mitte (nicht Teil der Felder-Liste) */}
+      {/* Würfel-Feld in der Mitte */}
       <div className="dice-center-field d-flex align-items-center justify-content-center bg-light rounded-3 shadow-sm">
         <h3 className="text-dark">Würfeln</h3>
       </div>

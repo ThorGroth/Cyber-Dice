@@ -1,6 +1,6 @@
-/* Font Awesome Icons laden */
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css");
 
+/* Globale Stile für die App */
 body {
   font-family: "Inter", sans-serif;
   background-color: #f8f9fa; /* Heller Hintergrund */
@@ -96,4 +96,3 @@ header h1 {
   border-top: none;
   justify-content: center;
 }
-

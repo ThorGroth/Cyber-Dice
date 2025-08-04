@@ -1,41 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import Board from './Board.jsx';
-import './App.css'; // Eigene App-spezifische CSS-Datei
+import './App.css';
 
-const API_BASE_URL = 'http://localhost:8000/api/game'; // Basis-URL Ihres FastAPI-Backends
+// Hardgecodierte Board-Daten, da das Backend keinen Endpunkt dafür bereitstellt
+// Dies ist für die visuelle Darstellung des statischen Boards.
+// Die tatsächlichen Ereignisse werden vom Backend zufällig bestimmt.
+const STATIC_GAME_BOARD = [
+  { "type": "empty", "description": "Du startest deine Reise im Cyberspace." },
+  { "type": "malware", "description": "Malware entdeckt, du verlierst 2 Datenpunkte.", "effect": -2 },
+  { "type": "question", "description": "Was ist ein Hash?", "question": "Was ist ein Hash?", "answer": "eine Prüfsumme", "reward": 1 },
+  { "type": "empty", "description": "Du hast ein Sicherheitsupdate installiert." },
+  { "type": "malware", "description": "Ransomware-Angriff, du verlierst 3 Datenpunkte.", "effect": -3 },
+  { "type": "question", "description": "Was macht eine Firewall?", "question": "Was macht eine Firewall?", "answer": "filtert Netzwerkverkehr", "reward": 1 },
+  { "type": "empty", "description": "Du bewegst dich unentdeckt durchs Netzwerk." },
+  { "type": "empty", "description": "Alles ruhig im System." },
+  { "type": "malware", "description": "Keylogger entdeckt, du verlierst 1 Datenpunkt.", "effect": -1 },
+  { "type": "question", "description": "Was ist Phishing?", "question": "Was ist Phishing?", "answer": "Identitätsdiebstahl per gefälschter Nachricht", "reward": 1 },
+
+  { "type": "empty", "description": "Du findest einen geheimen Zugang, keine Gefahr." },
+  { "type": "riddle", "description": "Was ist schwerer zu knacken, ein kurzes oder ein langes Passwort?", "question": "Was ist schwerer zu knacken?", "answer": "ein langes Passwort", "reward": 1 },
+  { "type": "malware", "description": "Ein Trojaner wurde eingeschleust, du verlierst 2 Datenpunkte.", "effect": -2 },
+  { "type": "question", "description": "Was ist ein VPN?", "question": "Was ist ein VPN?", "answer": "ein verschlüsselter Tunnel ins Internet", "reward": 1 },
+  { "type": "empty", "description": "Du durchquerst eine sichere Zone." },
+  { "type": "question", "description": "Was ist 2FA?", "question": "Was ist 2FA?", "answer": "Zwei-Faktor-Authentifizierung", "reward": 1 },
+  { "type": "malware", "description": "Spyware entdeckt, du verlierst 2 Datenpunkte.", "effect": -2 },
+  { "type": "empty", "description": "Du findest ein Backup deiner Daten, du fühlst dich sicherer." },
+  { "type": "question", "description": "Was bedeutet HTTPS?", "question": "Was bedeutet HTTPS?", "answer": "sicheres Hypertext-Übertragungsprotokoll", "reward": 1 },
+  { "type": "riddle", "description": "Ich bin keine Tür, aber ich blocke. Was bin ich?", "question": "Was blockt, ist aber keine Tür?", "answer": "Firewall", "reward": 1 },
+
+  { "type": "malware", "description": "DNS-Spoofing entdeckt, du verlierst 1 Datenpunkt.", "effect": -1 },
+  { "type": "empty", "description": "Du bewegst dich durch verschlüsselten Datenverkehr." },
+  { "type": "question", "description": "Was macht ein Antivirenprogramm?", "question": "Was macht ein Antivirenprogramm?", "answer": "erkennt und entfernt Schadsoftware", "reward": 1 },
+  { "type": "malware", "description": "Botnetz-Aktivität erkannt, du verlierst 3 Datenpunkte.", "effect": -3 },
+  { "type": "empty", "description": "System überprüft, keine Bedrohung gefunden." },
+  { "type": "question", "description": "Was bedeutet Social Engineering?", "question": "Was bedeutet Social Engineering?", "answer": "Menschen manipulieren, um Zugang zu bekommen", "reward": 1 },
+  { "type": "riddle", "description": "Je mehr du davon teilst, desto weniger hast du. Was ist es?", "question": "Was verliert man durchs Teilen?", "answer": "Geheimnis", "reward": 1 },
+  { "type": "malware", "description": "Rootkit-Alarm, du verlierst 2 Datenpunkte.", "effect": -2 },
+  { "type": "empty", "description": "Du hast eine verdächtige Mail gelöscht, gute Entscheidung." },
+  { "type": "goal", "description": "Ziel erreicht, sicheres System betreten!" }
+];
+
+const API_BASE_URL = 'http://localhost:8000';
 
 function App() {
   // === Zustandsvariablen ===
   const [playerName, setPlayerName] = useState('');
-  const [playerData, setPlayerData] = useState(null); // Speichert Spielerdaten vom Backend
-  const [gameBoard, setGameBoard] = useState([]); // Speichert die Board-Struktur vom Backend
+  // playerData speichert direkt die relevanten Daten (name, position, data_points)
+  const [playerData, setPlayerData] = useState(null);
+  const [gameBoard, setGameBoard] = useState(STATIC_GAME_BOARD); // Board direkt initialisieren
   const [gameMessage, setGameMessage] = useState(''); // Nachrichten an den Spieler
   const [currentRoll, setCurrentRoll] = useState(null); // Letzter Würfelwurf
-  const [showQuestionModal, setShowQuestionModal] = useState(false); // Modal für Fragen
-  const [questionPrompt, setQuestionPrompt] = useState(null); // Aktuelle Frage
-  const [answerInput, setAnswerInput] = useState(''); // Eingabe für die Antwort
   const [isGameOver, setIsGameOver] = useState(false); // Spiel beendet?
-  const [gamePhase, setGamePhase] = useState('start'); // 'start', 'playing', 'answering_question', 'game_over'
-
-  // === Effekte ===
-
-  // Board-Daten beim Start laden
-  useEffect(() => {
-    const fetchBoard = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/board`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setGameBoard(data);
-      } catch (error) {
-        console.error("Fehler beim Laden des Boards:", error);
-        setGameMessage("Fehler beim Laden des Spielbretts.");
-      }
-    };
-    fetchBoard();
-  }, []); // Leeres Array bedeutet, dass der Effekt nur einmal beim Mounten ausgeführt wird
+  const [gamePhase, setGamePhase] = useState('start'); // 'start', 'playing', 'game_over'
 
   // === Event-Handler und API-Aufrufe ===
 
@@ -54,12 +70,16 @@ function App() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setPlayerData(data.player);
+      // playerData direkt aus der Antwort setzen
+      setPlayerData({
+        name: playerName, // Name kommt vom Frontend
+        position: data.position,
+        data_points: data.data_points
+      });
       setGameMessage(data.message);
       setGamePhase('playing');
       setIsGameOver(false);
-      setCurrentRoll(null); // Würfelwurf zurücksetzen
-      setQuestionPrompt(null); // Fragen-Prompt zurücksetzen
+      setCurrentRoll(null);
     } catch (error) {
       console.error("Fehler beim Starten des Spiels:", error);
       setGameMessage("Fehler beim Starten des Spiels.");
@@ -80,57 +100,32 @@ function App() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setPlayerData(data.player); // Spielerdaten aktualisieren
-      setCurrentRoll(data.roll);
-      setGameMessage(data.message);
 
-      if (data.game_over) {
+      // Spielerdaten aus der Antwort aktualisieren
+      setPlayerData(prevData => ({
+        ...prevData,
+        position: data.new_position,
+        data_points: data.data_points
+      }));
+      setCurrentRoll(data.roll);
+
+      // Nachricht basierend auf dem Feldtyp und der Backend-Logik
+      let message = data.field.description || "Du hast ein unbekanntes Feld betreten.";
+      if (data.field.type === 'question' || data.field.type === 'riddle') {
+        message += ` Frage: "${data.field.question}". Bitte antworte in der Backend-Konsole!`;
+      } else if (data.field.type === 'goal') {
+        message = "Ziel erreicht – sicheres System betreten! Glückwunsch!";
         setIsGameOver(true);
         setGamePhase('game_over');
-      } else if (data.question_prompt) {
-        setQuestionPrompt(data.question_prompt);
-        setShowQuestionModal(true);
-        setGamePhase('answering_question');
+      } else if (data.game_over) { // Für den Fall, dass Datenpunkte 0 sind
+        setIsGameOver(true);
+        setGamePhase('game_over');
       }
-      // Wenn es keine Frage gibt, bleibt die Phase 'playing'
+      setGameMessage(message);
+
     } catch (error) {
       console.error("Fehler beim Würfeln:", error);
       setGameMessage("Fehler beim Würfeln.");
-    }
-  };
-
-  const handleAnswerQuestion = async () => {
-    if (!answerInput.trim()) {
-      setGameMessage("Bitte gib eine Antwort ein.");
-      return;
-    }
-    if (!questionPrompt) {
-      setGameMessage("Keine Frage zum Beantworten.");
-      return;
-    }
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/answer_question`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          question_id: questionPrompt.question_id,
-          answer: answerInput,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setPlayerData(data.player); // Spielerdaten aktualisieren
-      setGameMessage(data.message);
-      setAnswerInput(''); // Antwortfeld leeren
-      setShowQuestionModal(false); // Modal schließen
-      setQuestionPrompt(null); // Frage zurücksetzen
-      setGamePhase('playing'); // Zurück zur Spielphase
-    } catch (error) {
-      console.error("Fehler beim Beantworten der Frage:", error);
-      setGameMessage("Fehler beim Beantworten der Frage.");
     }
   };
 
@@ -171,7 +166,7 @@ function App() {
       )}
 
       {/* Spielbildschirm */}
-      {(gamePhase === 'playing' || gamePhase === 'answering_question') && playerData && (
+      {gamePhase === 'playing' && playerData && (
         <div className="row">
           {/* Linke Seitenleiste: Spielerstatus und Neues Spiel Button */}
           <div className="col-md-3 mb-4">
@@ -198,7 +193,6 @@ function App() {
                 setGameMessage('');
                 setPlayerName('');
                 setCurrentRoll(null);
-                setQuestionPrompt(null);
                 setIsGameOver(false);
               }}
             >
@@ -212,13 +206,13 @@ function App() {
               {gameBoard.length > 0 ? (
                 <Board fields={gameBoard} playerPosition={playerData.position} />
               ) : (
-                <p>Lade Spielbrett...</p>
+                <p>Fehler beim Laden des Spielbretts oder Board ist leer.</p>
               )}
 
               <button
                 className="btn btn-warning btn-lg rounded-pill mt-4 shadow-sm"
                 onClick={handleRollDice}
-                disabled={showQuestionModal || isGameOver} // Deaktivieren, wenn Frage offen oder Spiel vorbei
+                disabled={isGameOver} // Deaktivieren, wenn Spiel vorbei
               >
                 Würfeln
               </button>
@@ -247,7 +241,6 @@ function App() {
                 setGameMessage('');
                 setPlayerName('');
                 setCurrentRoll(null);
-                setQuestionPrompt(null);
                 setIsGameOver(false);
               }}
             >
@@ -257,47 +250,6 @@ function App() {
         </div>
       )}
 
-      {/* Fragen-Modal */}
-      {showQuestionModal && questionPrompt && (
-        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content rounded-3 shadow-lg">
-              <div className="modal-header bg-primary text-white rounded-top-3">
-                <h5 className="modal-title">Frage: {questionPrompt.field_type === 'riddle' ? 'Rätsel' : 'Quizfrage'}</h5>
-              </div>
-              <div className="modal-body">
-                <p className="lead">{questionPrompt.question}</p>
-                <div className="mb-3">
-                  <label htmlFor="answerInput" className="form-label visually-hidden">Deine Antwort:</label>
-                  <input
-                    type="text"
-                    className="form-control rounded-pill"
-                    id="answerInput"
-                    value={answerInput}
-                    onChange={(e) => setAnswerInput(e.target.value)}
-                    placeholder="Deine Antwort hier eingeben..."
-                    onKeyPress={(e) => { // Absenden bei Enter-Taste
-                      if (e.key === 'Enter') {
-                        handleAnswerQuestion();
-                      }
-                    }}
-                  />
-                </div>
-                {gameMessage && <p className="text-danger mt-2">{gameMessage}</p>}
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-primary rounded-pill"
-                  onClick={handleAnswerQuestion}
-                >
-                  Antwort absenden
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
