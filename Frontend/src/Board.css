@@ -1,0 +1,69 @@
+.board-grid-container {
+  display: grid;
+  /* Beispiel für ein 7x7 Grid, muss an die tatsächliche Feldanzahl und Anordnung angepasst werden */
+  /* Die genaue Anordnung hängt von der Anzahl der Felder und dem gewünschten Layout ab. */
+  /* Für das 30-Felder-Board und das Screenshot-Layout ist ein komplexeres Grid notwendig. */
+  /* Temporär: Einfaches flexibles Layout */
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); /* Felder flexibel anordnen */
+  gap: 5px; /* Abstand zwischen den Feldern */
+  max-width: 800px; /* Maximale Breite des Boards */
+  margin: auto;
+  position: relative; /* Für absolute Positionierung des Würfel-Feldes */
+  padding: 10px;
+  border: 2px solid #333; /* Rahmen um das Board */
+  border-radius: 10px;
+  background-color: #f0f0f0;
+}
+
+.field {
+  width: 60px; /* Einheitliche Feldgröße */
+  height: 60px;
+  border: 1px solid #444;
+  border-radius: 8px; /* Abgerundete Ecken */
+  font-weight: bold;
+  font-size: 0.8rem;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease-in-out;
+}
+
+.field:hover {
+  transform: translateY(-2px);
+}
+
+/* Farben für die Felder */
+.bg-secondary { background-color: #6c757d; } /* Grau */
+.bg-success { background-color: #28a745; } /* Grün (Start/Ziel) */
+.bg-warning { background-color: #ffc107; } /* Gelb (Frage/Rätsel) */
+.bg-danger { background-color: #dc3545; } /* Rot (Malware) */
+
+/* Spieler-Token */
+.player-token {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 25px;
+  height: 25px;
+  font-size: 0.7rem;
+  color: white;
+  z-index: 10;
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+/* Icons auf den Feldern */
+.field i {
+  font-size: 1.2rem;
+  margin-bottom: 3px;
+}
+
+/* Würfel-Feld in der Mitte (manuell positioniert, da es kein "Feld" im Array ist) */
+.dice-center-field {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 150px;
+  border: 2px dashed #999;
+  border-radius: 15px;
+  z-index: 5; /* Über den Feldern, aber unter dem Spieler-Token */
+}
