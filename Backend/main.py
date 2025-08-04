@@ -13,27 +13,35 @@ from services.game_logic import (
     prepare_event_pool
 )
 
-# Globale Spielvariablen
+# === Pydantic Request-Modelle ===
+
+class StartRequest(BaseModel):
+    name: str
+
+# === Globale Spielvariablen ===
+
 player = None
 board = []
+
+# === Lebenszyklus der App ===
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global board
     board = load_board()
-    prepare_event_pool(board)  #  Events nach Typen einsortieren
+    prepare_event_pool(board)  # Events nach Typen einsortieren
     print("Spielfeld geladen.")
     yield
     print("Server wird heruntergefahren.")
 
 app = FastAPI(title="Cyber Dice API", lifespan=lifespan)
 
-# === API ===
+# === API-Endpunkte ===
 
 @app.post("/start")
-def start_game(name: str):
+def start_game(request: StartRequest):
     global player
-    player = Player(name=name)
+    player = Player(name=request.name)
     return {
         "message": f"Spiel für {player.name} gestartet.",
         "position": player.position,
