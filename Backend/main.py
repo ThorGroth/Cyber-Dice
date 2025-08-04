@@ -6,7 +6,11 @@ import random
 
 from models import Player
 from services.board_loader import load_board
-from services.game_logic import get_current_field, apply_event
+from services.game_logic import (
+    get_current_field,
+    apply_event,
+    prepare_event_pool
+)
 
 # Globale Spielvariablen
 player = None
@@ -16,6 +20,7 @@ board = []
 async def lifespan(app: FastAPI):
     global board
     board = load_board()
+    prepare_event_pool(board)  # ← Events nach Typen einsortieren
     print("Spielfeld geladen.")
     yield
     print("Server wird heruntergefahren.")
@@ -46,7 +51,7 @@ def roll_dice():
     roll = random.randint(1, 6)
     player.position += roll
 
-    field = get_current_field(board, player.position)
+    field = get_current_field(player.position, len(board))  # ← Neue Methode
     apply_event(player, field)
 
     return {
