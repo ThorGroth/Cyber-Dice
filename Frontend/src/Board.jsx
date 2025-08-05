@@ -1,7 +1,8 @@
 import React from 'react';
 import './Board.css';
+import Dice from './Dice.jsx';
 
-const Board = ({ fields, playerPosition }) => {
+const Board = ({ fields, playerPosition, onRollDice, diceValue }) => {
   // Eine einfache Funktion, um die Farbe eines Feldes zu bestimmen
   const getFieldColor = (field) => {
     switch (field.type) {
@@ -43,13 +44,18 @@ const Board = ({ fields, playerPosition }) => {
 
   return (
     <div className="board-grid-container">
+      {/* Das Würfel-Feld ist jetzt ein klickbarer Button direkt im Grid */}
+      <button 
+        className="dice-center-field d-flex align-items-center justify-content-center"
+        onClick={onRollDice}
+      >
+        <Dice value={diceValue} />
+      </button>
+
+      {/* Füge die Spielfelder hinzu. Beachte, dass sie jetzt um den Würfel herum gerendert werden. */}
       {fields.map((field, index) => {
         return renderField(field, index);
       })}
-      {/* Würfel-Feld in der Mitte */}
-      <div className="dice-center-field d-flex align-items-center justify-content-center bg-light rounded-3 shadow-sm">
-        <h3 className="text-dark">Würfeln</h3>
-      </div>
     </div>
   );
 };

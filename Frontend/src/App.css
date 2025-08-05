@@ -22,8 +22,8 @@ header h1 {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Dunkler Overlay */
-  z-index: 1000; /* Über allem anderen */
+  background-color: rgba(0, 0, 0, 0.7); 
+  z-index: 1000; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,12 +39,12 @@ header h1 {
 }
 
 .player-card {
-  background: linear-gradient(45deg, #007bff, #0056b3); /* Blauer Gradient */
+  background: linear-gradient(45deg, #007bff, #0056b3); 
   border: none;
 }
 
 .dice-roll-card {
-  background: linear-gradient(45deg, #17a2b8, #138496); /* Türkiser Gradient */
+  background: linear-gradient(45deg, #17a2b8, #138496); 
   border: none;
 }
 
@@ -63,7 +63,7 @@ header h1 {
 .btn-warning {
   background-color: #ffc107;
   border-color: #ffc107;
-  color: #343a40; /* Dunkler Text auf gelb */
+  color: #343a40; 
   transition: all 0.2s ease-in-out;
 }
 .btn-warning:hover {

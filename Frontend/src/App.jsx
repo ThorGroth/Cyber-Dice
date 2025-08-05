@@ -3,8 +3,6 @@ import Board from './Board.jsx';
 import './App.css';
 
 // Hardgecodierte Board-Daten, da das Backend keinen Endpunkt dafür bereitstellt
-// Dies ist für die visuelle Darstellung des statischen Boards.
-// Die tatsächlichen Ereignisse werden vom Backend zufällig bestimmt.
 const STATIC_GAME_BOARD = [
   { "type": "empty", "description": "Du startest deine Reise im Cyberspace." },
   { "type": "malware", "description": "Malware entdeckt, du verlierst 2 Datenpunkte.", "effect": -2 },
@@ -45,13 +43,12 @@ const API_BASE_URL = 'http://localhost:8000';
 function App() {
   // === Zustandsvariablen ===
   const [playerName, setPlayerName] = useState('');
-  // playerData speichert direkt die relevanten Daten (name, position, data_points)
   const [playerData, setPlayerData] = useState(null);
-  const [gameBoard, setGameBoard] = useState(STATIC_GAME_BOARD); // Board direkt initialisieren
-  const [gameMessage, setGameMessage] = useState(''); // Nachrichten an den Spieler
-  const [currentRoll, setCurrentRoll] = useState(null); // Letzter Würfelwurf
-  const [isGameOver, setIsGameOver] = useState(false); // Spiel beendet?
-  const [gamePhase, setGamePhase] = useState('start'); // 'start', 'playing', 'game_over'
+  const [gameBoard, setGameBoard] = useState(STATIC_GAME_BOARD);
+  const [gameMessage, setGameMessage] = useState('');
+  const [currentRoll, setCurrentRoll] = useState(null);
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [gamePhase, setGamePhase] = useState('start');
 
   // === Event-Handler und API-Aufrufe ===
 
@@ -70,9 +67,8 @@ function App() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      // playerData direkt aus der Antwort setzen
       setPlayerData({
-        name: playerName, // Name kommt vom Frontend
+        name: playerName,
         position: data.position,
         data_points: data.data_points
       });
@@ -101,7 +97,6 @@ function App() {
       }
       const data = await response.json();
 
-      // Spielerdaten aus der Antwort aktualisieren
       setPlayerData(prevData => ({
         ...prevData,
         position: data.new_position,
@@ -109,7 +104,6 @@ function App() {
       }));
       setCurrentRoll(data.roll);
 
-      // Nachricht basierend auf dem Feldtyp und der Backend-Logik
       let message = data.field.description || "Du hast ein unbekanntes Feld betreten.";
       if (data.field.type === 'question' || data.field.type === 'riddle') {
         message += ` Frage: "${data.field.question}". Bitte antworte in der Backend-Konsole!`;
@@ -117,7 +111,7 @@ function App() {
         message = "Ziel erreicht – sicheres System betreten! Glückwunsch!";
         setIsGameOver(true);
         setGamePhase('game_over');
-      } else if (data.game_over) { // Für den Fall, dass Datenpunkte 0 sind
+      } else if (data.game_over) {
         setIsGameOver(true);
         setGamePhase('game_over');
       }
@@ -188,8 +182,8 @@ function App() {
             <button
               className="btn btn-success btn-lg w-100 rounded-pill mt-3"
               onClick={() => {
-                setGamePhase('start'); // Zurück zum Startbildschirm
-                setPlayerData(null); // Spielerdaten zurücksetzen
+                setGamePhase('start');
+                setPlayerData(null);
                 setGameMessage('');
                 setPlayerName('');
                 setCurrentRoll(null);
@@ -200,22 +194,19 @@ function App() {
             </button>
           </div>
 
-          {/* Hauptbereich: Spielbrett und Würfel-Button */}
+          {/* Hauptbereich: Spielbrett und Würfel */}
           <div className="col-md-9">
             <div className="board-area d-flex flex-column align-items-center">
               {gameBoard.length > 0 ? (
-                <Board fields={gameBoard} playerPosition={playerData.position} />
+                <Board 
+                  fields={gameBoard} 
+                  playerPosition={playerData.position} 
+                  onRollDice={handleRollDice} 
+                  diceValue={currentRoll} 
+                />
               ) : (
                 <p>Fehler beim Laden des Spielbretts oder Board ist leer.</p>
               )}
-
-              <button
-                className="btn btn-warning btn-lg rounded-pill mt-4 shadow-sm"
-                onClick={handleRollDice}
-                disabled={isGameOver} // Deaktivieren, wenn Spiel vorbei
-              >
-                Würfeln
-              </button>
               {gameMessage && (
                 <p className={`mt-3 text-center fw-bold ${gameMessage.includes("richtig") ? 'text-success' : gameMessage.includes("falsch") || gameMessage.includes("Malware") ? 'text-danger' : 'text-primary'}`}>
                   {gameMessage}

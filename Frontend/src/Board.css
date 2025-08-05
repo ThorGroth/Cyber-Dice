@@ -1,42 +1,60 @@
+/* board.css */
 .board-grid-container {
   display: grid;
-  /* Beispiel für ein 7x7 Grid, muss an die tatsächliche Feldanzahl und Anordnung angepasst werden */
-  /* Die genaue Anordnung hängt von der Anzahl der Felder und dem gewünschten Layout ab. */
-  /* Für das 30-Felder-Board und das Screenshot-Layout ist ein komplexeres Grid notwendig. */
-  /* Temporär: Einfaches flexibles Layout */
-  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); /* Felder flexibel anordnen */
-  gap: 5px; /* Abstand zwischen den Feldern */
-  max-width: 800px; /* Maximale Breite des Boards */
+  /* Definiere ein 5x6 Raster für die Felder */
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 5px; 
+  max-width: 800px; 
   margin: auto;
-  position: relative; /* Für absolute Positionierung des Würfel-Feldes */
+  position: relative; 
   padding: 10px;
-  border: 2px solid #333; /* Rahmen um das Board */
+  border: 2px solid #333; 
   border-radius: 10px;
   background-color: #f0f0f0;
 }
 
+/* Weise jedem Feld einen Platz im Grid zu */
 .field {
-  width: 60px; /* Einheitliche Feldgröße */
-  height: 60px;
+  width: 100%; /* Die Felder füllen ihre Grid-Zellen komplett aus */
+  height: 100%;
   border: 1px solid #444;
-  border-radius: 8px; /* Abgerundete Ecken */
+  border-radius: 8px;
   font-weight: bold;
   font-size: 0.8rem;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   transition: transform 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
+/* WICHTIG: Definiere die Position des Würfels im Grid */
+.dice-center-field {
+  grid-area: 3 / 2 / span 2 / span 3; /* Startet in Zeile 3, Spalte 2 und spannt über 2 Zeilen und 3 Spalten */
+  background-color: transparent; /* Macht den Container unsichtbar */
+  border: none;
+  z-index: 5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dice-placeholder {
+  /* Ein leerer Platzhalter, um die richtige Positionierung im Grid zu gewährleisten */
+  display: none; /* Macht den Platzhalter unsichtbar */
+}
+
+/* Die anderen CSS-Regeln bleiben unverändert */
 .field:hover {
   transform: translateY(-2px);
 }
-
-/* Farben für die Felder */
-.bg-secondary { background-color: #6c757d; } /* Grau */
-.bg-success { background-color: #28a745; } /* Grün (Start/Ziel) */
-.bg-warning { background-color: #ffc107; } /* Gelb (Frage/Rätsel) */
-.bg-danger { background-color: #dc3545; } /* Rot (Malware) */
-
-/* Spieler-Token */
+.bg-secondary { background-color: #6c757d; }
+.bg-success { background-color: #28a745; }
+.bg-warning { background-color: #ffc107; }
+.bg-danger { background-color: #dc3545; }
 .player-token {
   position: absolute;
   bottom: 2px;
@@ -48,22 +66,7 @@
   z-index: 10;
   border: 1px solid rgba(255,255,255,0.5);
 }
-
-/* Icons auf den Feldern */
 .field i {
   font-size: 1.2rem;
   margin-bottom: 3px;
-}
-
-/* Würfel-Feld in der Mitte (manuell positioniert, da es kein "Feld" im Array ist) */
-.dice-center-field {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 150px;
-  height: 150px;
-  border: 2px dashed #999;
-  border-radius: 15px;
-  z-index: 5; /* Über den Feldern, aber unter dem Spieler-Token */
 }
