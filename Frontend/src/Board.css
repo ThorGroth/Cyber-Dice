@@ -1,22 +1,77 @@
-/* board.css */
+/* Globale Stile für den Board-Container */
 .board-grid-container {
   display: grid;
-  /* Definiere ein 5x6 Raster für die Felder */
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  gap: 5px; 
-  max-width: 800px; 
+  /* 9 Spalten und 8 Reihen mit einer festen Größe, um gleichmäßige Vierecke zu erzwingen */
+  grid-template-columns: repeat(9, 80px); /* Jede Spalte 80px breit */
+  grid-template-rows: repeat(8, 80px); /* Jede Reihe 80px hoch */
+  /* Lücken zwischen den Grid-Zellen */
+  gap: 2px;
+  /* Die Gesamtbreite und Höhe des Containers berechnen */
+  width: calc(9 * 80px + 8 * 2px);
+  height: calc(8 * 80px + 7 * 2px);
   margin: auto;
-  position: relative; 
-  padding: 10px;
-  border: 2px solid #333; 
+  position: relative;
+  /* Padding, um einen Rand zum äußeren Container zu schaffen */
+  padding: 0;
+  border: 2px solid #333;
   border-radius: 10px;
   background-color: #f0f0f0;
 }
 
-/* Weise jedem Feld einen Platz im Grid zu */
+/* Wichtig: Positioniere den Würfel über dem inneren Bereich */
+.dice-center-field {
+  grid-area: 2 / 2 / span 6 / span 7;
+  background-color: transparent;
+  border: none;
+  z-index: 5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Positionierung der 32 Felder im 9x8 Grid --- */
+/* Obere Reihe (9 Felder) */
+.board-grid-container > :nth-child(2) { grid-area: 1 / 1; }
+.board-grid-container > :nth-child(3) { grid-area: 1 / 2; }
+.board-grid-container > :nth-child(4) { grid-area: 1 / 3; }
+.board-grid-container > :nth-child(5) { grid-area: 1 / 4; }
+.board-grid-container > :nth-child(6) { grid-area: 1 / 5; }
+.board-grid-container > :nth-child(7) { grid-area: 1 / 6; }
+.board-grid-container > :nth-child(8) { grid-area: 1 / 7; }
+.board-grid-container > :nth-child(9) { grid-area: 1 / 8; }
+.board-grid-container > :nth-child(10) { grid-area: 1 / 9; }
+
+/* Rechte Seite (7 Felder) */
+.board-grid-container > :nth-child(11) { grid-area: 2 / 9; }
+.board-grid-container > :nth-child(12) { grid-area: 3 / 9; }
+.board-grid-container > :nth-child(13) { grid-area: 4 / 9; }
+.board-grid-container > :nth-child(14) { grid-area: 5 / 9; }
+.board-grid-container > :nth-child(15) { grid-area: 6 / 9; }
+.board-grid-container > :nth-child(16) { grid-area: 7 / 9; }
+.board-grid-container > :nth-child(17) { grid-area: 8 / 9; }
+
+/* Untere Reihe (9 Felder) */
+.board-grid-container > :nth-child(18) { grid-area: 8 / 8; }
+.board-grid-container > :nth-child(19) { grid-area: 8 / 7; }
+.board-grid-container > :nth-child(20) { grid-area: 8 / 6; }
+.board-grid-container > :nth-child(21) { grid-area: 8 / 5; }
+.board-grid-container > :nth-child(22) { grid-area: 8 / 4; }
+.board-grid-container > :nth-child(23) { grid-area: 8 / 3; }
+.board-grid-container > :nth-child(24) { grid-area: 8 / 2; }
+.board-grid-container > :nth-child(25) { grid-area: 8 / 1; }
+
+/* Linke Seite (7 Felder) */
+.board-grid-container > :nth-child(26) { grid-area: 7 / 1; }
+.board-grid-container > :nth-child(27) { grid-area: 6 / 1; }
+.board-grid-container > :nth-child(28) { grid-area: 5 / 1; }
+.board-grid-container > :nth-child(29) { grid-area: 4 / 1; }
+.board-grid-container > :nth-child(30) { grid-area: 3 / 1; }
+.board-grid-container > :nth-child(31) { grid-area: 2 / 1; }
+
+/* --- Styling der Spielfelder --- */
 .field {
-  width: 100%; /* Die Felder füllen ihre Grid-Zellen komplett aus */
+  width: 100%;
   height: 100%;
   border: 1px solid #444;
   border-radius: 8px;
@@ -30,43 +85,31 @@
   flex-direction: column;
 }
 
-/* WICHTIG: Definiere die Position des Würfels im Grid */
-.dice-center-field {
-  grid-area: 3 / 2 / span 2 / span 3; /* Startet in Zeile 3, Spalte 2 und spannt über 2 Zeilen und 3 Spalten */
-  background-color: transparent; /* Macht den Container unsichtbar */
-  border: none;
-  z-index: 5;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dice-placeholder {
-  /* Ein leerer Platzhalter, um die richtige Positionierung im Grid zu gewährleisten */
-  display: none; /* Macht den Platzhalter unsichtbar */
-}
-
-/* Die anderen CSS-Regeln bleiben unverändert */
 .field:hover {
-  transform: translateY(-2px);
+    transform: translateY(-2px);
 }
+
+/* Farben für die Felder */
 .bg-secondary { background-color: #6c757d; }
 .bg-success { background-color: #28a745; }
 .bg-warning { background-color: #ffc107; }
 .bg-danger { background-color: #dc3545; }
+
+/* Spieler-Token */
 .player-token {
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  width: 25px;
-  height: 25px;
-  font-size: 0.7rem;
-  color: white;
-  z-index: 10;
-  border: 1px solid rgba(255,255,255,0.5);
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 25px;
+    height: 25px;
+    font-size: 0.7rem;
+    color: white;
+    z-index: 10;
+    border: 1px solid rgba(255,255,255,0.5);
 }
+
+/* Icons auf den Feldern */
 .field i {
-  font-size: 1.2rem;
-  margin-bottom: 3px;
+    font-size: 1.2rem;
+    margin-bottom: 3px;
 }

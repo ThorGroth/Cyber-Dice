@@ -2,8 +2,7 @@ import React from 'react';
 import './Board.css';
 import Dice from './Dice.jsx';
 
-const Board = ({ fields, playerPosition, onRollDice, diceValue }) => {
-  // Eine einfache Funktion, um die Farbe eines Feldes zu bestimmen
+const Board = ({ fields, playerPosition, onRollDice, diceValue, isRolling }) => {
   const getFieldColor = (field) => {
     switch (field.type) {
       case 'empty': return 'bg-secondary'; // Grau
@@ -15,9 +14,7 @@ const Board = ({ fields, playerPosition, onRollDice, diceValue }) => {
     }
   };
 
-  // Hilfsfunktion, um die Felder als HTML-Elemente zu rendern
   const renderField = (field, index) => {
-    // Überprüfen, ob der Spieler auf diesem Feld steht
     const isPlayerHere = playerPosition === index;
 
     return (
@@ -26,13 +23,11 @@ const Board = ({ fields, playerPosition, onRollDice, diceValue }) => {
         className={`field ${getFieldColor(field)} text-white position-relative d-flex align-items-center justify-content-center flex-column p-1`}
         title={field.description || field.question || "Unbekanntes Feld"}
       >
-        {/* Feld-Typ-Indikator */}
         {field.type === 'malware' && <i className="fas fa-bug text-dark"></i>}
         {(field.type === 'question' || field.type === 'riddle') && <i className="fas fa-question text-dark"></i>}
         {field.type === 'goal' && <i className="fas fa-flag-checkered text-dark"></i>}
-        {field.type === 'empty' && <i className="fas fa-circle text-dark"></i>} {/* Kleiner Punkt für leere Felder */}
+        {field.type === 'empty' && <i className="fas fa-circle text-dark"></i>}
 
-        {/* Spieler-Token */}
         {isPlayerHere && (
           <div className="player-token player-1 bg-info rounded-circle d-flex align-items-center justify-content-center shadow-sm">
             P1
@@ -44,18 +39,17 @@ const Board = ({ fields, playerPosition, onRollDice, diceValue }) => {
 
   return (
     <div className="board-grid-container">
-      {/* Das Würfel-Feld ist jetzt ein klickbarer Button direkt im Grid */}
+      {/* Das Würfelfeld ist ein Klick-Element in der Mitte */}
       <button 
-        className="dice-center-field d-flex align-items-center justify-content-center"
+        className="dice-center-field"
         onClick={onRollDice}
+        disabled={isRolling}
       >
-        <Dice value={diceValue} />
+        <Dice value={diceValue} isRolling={isRolling} />
       </button>
 
-      {/* Füge die Spielfelder hinzu. Beachte, dass sie jetzt um den Würfel herum gerendert werden. */}
-      {fields.map((field, index) => {
-        return renderField(field, index);
-      })}
+      {/* Alle 30 Felder werden in einer Schleife gerendert. */}
+      {fields.map((field, index) => renderField(field, index))}
     </div>
   );
 };
