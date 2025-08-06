@@ -1,41 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import Board from './Board.jsx';
 import './App.css';
+import EventModal from './EventModal.jsx'; // NEU: EventModal importieren
 
-// Das Start-/Zielfeld (goal) ist jetzt der erste Eintrag im Array (Index 0)
+// Hardgecodierte Board-Daten, da das Backend keinen Endpunkt dafür bereitstellt
 const STATIC_GAME_BOARD = [
-  { "type": "goal", "description": "Ziel erreicht, sicheres System betreten!" }, // Index 0: Das grüne Start-/Zielfeld
-  { "type": "malware", "description": "Malware entdeckt, du verlierst 2 Datenpunkte.", "effect": -2 },
-  { "type": "question", "description": "Was ist ein Hash?", "question": "Was ist ein Hash?", "answer": "eine Prüfsumme", "reward": 1 },
-  { "type": "empty", "description": "Du hast ein Sicherheitsupdate installiert." },
-  { "type": "malware", "description": "Ransomware-Angriff, du verlierst 3 Datenpunkte.", "effect": -3 },
-  { "type": "question", "description": "Was macht eine Firewall?", "question": "Was macht eine Firewall?", "answer": "filtert Netzwerkverkehr", "reward": 1 },
-  { "type": "empty", "description": "Du bewegst dich unentdeckt durchs Netzwerk." },
-  { "type": "empty", "description": "Alles ruhig im System." },
-  { "type": "malware", "description": "Keylogger entdeckt, du verlierst 1 Datenpunkt.", "effect": -1 },
-  { "type": "question", "description": "Was ist Phishing?", "question": "Was ist Phishing?", "answer": "Identitätsdiebstahl per gefälschter Nachricht", "reward": 1 },
+  { "type": "goal", "description": "Ziel erreicht, sicheres System betreten!", "isRevealed": true }, // Index 0: Das grüne Start-/Zielfeld, immer aufgedeckt
+  { "type": "malware", "description": "Malware entdeckt, du verlierst 2 Datenpunkte.", "effect": -2, "isRevealed": false },
+  { "type": "question", "description": "Was ist ein Hash?", "question": "Was ist ein Hash?", "answer": "eine Prüfsumme", "reward": 1, "isRevealed": false },
+  { "type": "empty", "description": "Du hast ein Sicherheitsupdate installiert.", "isRevealed": false },
+  { "type": "malware", "description": "Ransomware-Angriff, du verlierst 3 Datenpunkte.", "effect": -3, "isRevealed": false },
+  { "type": "question", "description": "Was macht eine Firewall?", "question": "Was macht eine Firewall?", "answer": "filtert Netzwerkverkehr", "reward": 1, "isRevealed": false },
+  { "type": "empty", "description": "Du bewegst dich unentdeckt durchs Netzwerk.", "isRevealed": false },
+  { "type": "empty", "description": "Alles ruhig im System.", "isRevealed": false },
+  { "type": "malware", "description": "Keylogger entdeckt, du verlierst 1 Datenpunkt.", "effect": -1, "isRevealed": false },
+  { "type": "question", "description": "Was ist Phishing?", "question": "Was ist Phishing?", "answer": "Identitätsdiebstahl per gefälschter Nachricht", "reward": 1, "isRevealed": false },
 
-  { "type": "empty", "description": "Du findest einen geheimen Zugang, keine Gefahr." },
-  { "type": "riddle", "description": "Was ist schwerer zu knacken, ein kurzes oder ein langes Passwort?", "question": "Was ist schwerer zu knacken?", "answer": "ein langes Passwort", "reward": 1 },
-  { "type": "malware", "description": "Ein Trojaner wurde eingeschleust, du verlierst 2 Datenpunkte.", "effect": -2 },
-  { "type": "question", "description": "Was ist ein VPN?", "question": "Was ist ein VPN?", "answer": "ein verschlüsselter Tunnel ins Internet", "reward": 1 },
-  { "type": "empty", "description": "Du durchquerst eine sichere Zone." },
-  { "type": "question", "description": "Was ist 2FA?", "question": "Was ist 2FA?", "answer": "Zwei-Faktor-Authentifizierung", "reward": 1 },
-  { "type": "malware", "description": "Spyware entdeckt, du verlierst 2 Datenpunkte.", "effect": -2 },
-  { "type": "empty", "description": "Du findest ein Backup deiner Daten, du fühlst dich sicherer." },
-  { "type": "question", "description": "Was bedeutet HTTPS?", "question": "Was bedeutet HTTPS?", "answer": "sicheres Hypertext-Übertragungsprotokoll", "reward": 1 },
-  { "type": "riddle", "description": "Ich bin keine Tür, aber ich blocke. Was bin ich?", "question": "Was blockt, ist aber keine Tür?", "answer": "Firewall", "reward": 1 },
+  { "type": "empty", "description": "Du findest einen geheimen Zugang, keine Gefahr.", "isRevealed": false },
+  { "type": "riddle", "description": "Was ist schwerer zu knacken, ein kurzes oder ein langes Passwort?", "question": "Was ist schwerer zu knacken?", "answer": "ein langes Passwort", "reward": 1, "isRevealed": false },
+  { "type": "malware", "description": "Ein Trojaner wurde eingeschleust, du verlierst 2 Datenpunkte.", "effect": -2, "isRevealed": false },
+  { "type": "question", "description": "Was ist ein VPN?", "question": "Was ist ein VPN?", "answer": "ein verschlüsselter Tunnel ins Internet", "reward": 1, "isRevealed": false },
+  { "type": "empty", "description": "Du durchquerst eine sichere Zone.", "isRevealed": false },
+  { "type": "question", "description": "Was ist 2FA?", "question": "Was ist 2FA?", "answer": "Zwei-Faktor-Authentifizierung", "reward": 1, "isRevealed": false },
+  { "type": "malware", "description": "Spyware entdeckt, du verlierst 2 Datenpunkte.", "effect": -2, "isRevealed": false },
+  { "type": "empty", "description": "Du findest ein Backup deiner Daten, du fühlst dich sicherer.", "isRevealed": false },
+  { "type": "question", "description": "Was bedeutet HTTPS?", "question": "Was bedeutet HTTPS?", "answer": "sicheres Hypertext-Übertragungsprotokoll", "reward": 1, "isRevealed": false },
+  { "type": "riddle", "description": "Ich bin keine Tür, aber ich blocke. Was bin ich?", "question": "Was blockt, ist aber keine Tür?", "answer": "Firewall", "reward": 1, "isRevealed": false },
 
-  { "type": "malware", "description": "DNS-Spoofing entdeckt, du verlierst 1 Datenpunkt.", "effect": -1 },
-  { "type": "empty", "description": "Du bewegst dich durch verschlüsselten Datenverkehr." },
-  { "type": "question", "description": "Was macht ein Antivirenprogramm?", "question": "Was macht ein Antivirenprogramm?", "answer": "erkennt und entfernt Schadsoftware", "reward": 1 },
-  { "type": "malware", "description": "Botnetz-Aktivität erkannt, du verlierst 3 Datenpunkte.", "effect": -3 },
-  { "type": "empty", "description": "System überprüft, keine Bedrohung gefunden." },
-  { "type": "question", "description": "Was bedeutet Social Engineering?", "question": "Was bedeutet Social Engineering?", "answer": "Menschen manipulieren, um Zugang zu bekommen", "reward": 1 },
-  { "type": "riddle", "description": "Je mehr du davon teilst, desto weniger hast du. Was ist es?", "question": "Was verliert man durchs Teilen?", "answer": "Geheimnis", "reward": 1 },
-  { "type": "malware", "description": "Rootkit-Alarm, du verlierst 2 Datenpunkte.", "effect": -2 },
-  { "type": "empty", "description": "Du hast eine verdächtige Mail gelöscht, gute Entscheidung." },
-  { "type": "empty", "description": "Du startest deine Reise im Cyberspace." } // Das alte Startfeld, jetzt am Ende
+  { "type": "malware", "description": "DNS-Spoofing entdeckt, du verlierst 1 Datenpunkt.", "effect": -1, "isRevealed": false },
+  { "type": "empty", "description": "Du bewegst dich durch verschlüsselten Datenverkehr.", "isRevealed": false },
+  { "type": "question", "description": "Was macht ein Antivirenprogramm?", "question": "Was macht ein Antivirenprogramm?", "answer": "erkennt und entfernt Schadsoftware", "reward": 1, "isRevealed": false },
+  { "type": "malware", "description": "Botnetz-Aktivität erkannt, du verlierst 3 Datenpunkte.", "effect": -3, "isRevealed": false },
+  { "type": "empty", "description": "System überprüft, keine Bedrohung gefunden.", "isRevealed": false },
+  { "type": "question", "description": "Was bedeutet Social Engineering?", "question": "Was bedeutet Social Engineering?", "answer": "Menschen manipulieren, um Zugang zu bekommen", "reward": 1, "isRevealed": false },
+  { "type": "riddle", "description": "Je mehr du davon teilst, desto weniger hast du. Was ist es?", "question": "Was verliert man durchs Teilen?", "answer": "Geheimnis", "reward": 1, "isRevealed": false },
+  { "type": "malware", "description": "Rootkit-Alarm, du verlierst 2 Datenpunkte.", "effect": -2, "isRevealed": false },
+  { "type": "empty", "description": "Du hast eine verdächtige Mail gelöscht, gute Entscheidung.", "isRevealed": false },
+  { "type": "empty", "description": "Du startest deine Reise im Cyberspace.", "isRevealed": false } // Das alte Startfeld, jetzt am Ende
 ];
 
 const API_BASE_URL = 'http://localhost:8000';
@@ -48,7 +49,13 @@ function App() {
   const [currentRoll, setCurrentRoll] = useState(null);
   const [isGameOver, setIsGameOver] = useState(false);
   const [gamePhase, setGamePhase] = useState('start');
-  const [isStartField, setIsStartField] = useState(true); // NEUER ZUSTAND: True, wenn Spieler auf Startfeld (Index 0)
+  const [isStartField, setIsStartField] = useState(true); 
+
+  // NEUE ZUSTÄNDE FÜR DAS MODAL
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [modalField, setModalField] = useState(null); // Speichert das vollständige Feld-Objekt
+  const [modalInput, setModalInput] = useState('');
+  const [modalMessage, setModalMessage] = useState(''); // Für Feedback im Modal (richtig/falsch)
 
   const handleStartGame = async () => {
     if (!playerName.trim()) {
@@ -75,6 +82,14 @@ function App() {
       setIsGameOver(false);
       setCurrentRoll(null);
       setIsStartField(true); // Spieler ist auf dem Startfeld
+      
+      // Setze alle Felder außer dem Startfeld auf nicht aufgedeckt
+      const initialGameBoard = STATIC_GAME_BOARD.map((field, index) => ({
+        ...field,
+        isRevealed: index === 0 ? true : false // Nur Startfeld ist am Anfang aufgedeckt
+      }));
+      setGameBoard(initialGameBoard);
+
     } catch (error) {
       console.error("Fehler beim Starten des Spiels:", error);
       setGameMessage("Fehler beim Starten des Spiels.");
@@ -98,13 +113,13 @@ function App() {
       
       const newPosition = data.new_position;
 
-      // Wenn der Spieler das Startfeld (Index 0) verlässt
       if (newPosition !== 0) {
         setIsStartField(false); 
       } else {
-        setIsStartField(true); // Bleibt auf dem Startfeld (z.B. bei 0-Wurf)
+        setIsStartField(true); 
       }
 
+      // Spielerdaten sofort aktualisieren, da das Backend Effekte anwendet
       setPlayerData(prevData => ({
         ...prevData,
         position: newPosition,
@@ -112,23 +127,69 @@ function App() {
       }));
       setCurrentRoll(data.roll);
 
-      let message = data.field.description || "Du hast ein unbekanntes Feld betreten.";
-      if (data.field.type === 'question' || data.field.type === 'riddle') {
-        message += ` Frage: "${data.field.question}". Bitte antworte in der Backend-Konsole!`;
+      // Markiere das neue Feld als aufgedeckt
+      setGameBoard(prevGameBoard => {
+        const updatedBoard = [...prevGameBoard];
+        if (updatedBoard[newPosition]) {
+          updatedBoard[newPosition].isRevealed = true;
+        }
+        return updatedBoard;
+      });
+
+      // MODAL-LOGIK: Zeige Modal für spezifische Feldtypen
+      if (data.field.type === 'malware' || data.field.type === 'question' || data.field.type === 'riddle') {
+        setModalField(data.field); // Speichere das Feld, um es im Modal anzuzeigen
+        setShowEventModal(true);
+        setModalMessage(''); // Modal-Nachricht zurücksetzen
+        setModalInput(''); // Modal-Eingabe zurücksetzen
       } else if (data.field.type === 'goal') {
-        message = "Ziel erreicht – sicheres System betreten! Glückwunsch!";
+        setGameMessage("Ziel erreicht – sicheres System betreten! Glückwunsch!");
         setIsGameOver(true);
         setGamePhase('game_over');
       } else if (data.game_over) {
         setIsGameOver(true);
         setGamePhase('game_over');
+      } else {
+        // Für "empty"-Felder oder andere Nicht-Modal-Events, einfach Spielnachricht setzen
+        setGameMessage(data.field.description || "Du hast ein unbekanntes Feld betreten.");
       }
-      setGameMessage(message);
 
     } catch (error) {
       console.error("Fehler beim Würfeln:", error);
       setGameMessage("Fehler beim Würfeln.");
     }
+  };
+
+  // MODAL-HANDLER
+  const handleModalClose = () => {
+    setShowEventModal(false);
+    setModalField(null);
+    setModalInput('');
+    setModalMessage('');
+    // Nach dem Schließen des Modals die Haupt-Spielnachricht aktualisieren
+    if (modalField) {
+      let message = modalField.description || "Du hast ein unbekanntes Feld betreten.";
+      if (modalField.type === 'question' || modalField.type === 'riddle') {
+        message += " (Antwort in Konsole prüfen)"; // Hinweis, wo die Antwort verarbeitet wurde
+      }
+      setGameMessage(message);
+    }
+  };
+
+  const handleAnswerSubmit = () => {
+    if (modalField && (modalField.type === 'question' || modalField.type === 'riddle')) {
+      const isCorrect = modalInput.trim().toLowerCase() === modalField.answer.trim().toLowerCase();
+      if (isCorrect) {
+        setModalMessage("Richtig! Du erhältst " + modalField.reward + " Datenpunkt(e).");
+        // Punkte werden bereits vom Backend aktualisiert, daher hier kein Frontend-Update nötig.
+      } else {
+        setModalMessage("Falsch beantwortet. Kein Bonus.");
+      }
+    }
+    // Feedback für 1.5 Sekunden anzeigen, dann Modal schließen
+    setTimeout(() => {
+      handleModalClose();
+    }, 1500); 
   };
 
   return (
@@ -138,6 +199,7 @@ function App() {
         <p className="lead text-muted">Das IT-Quiz-Würfelspiel</p>
       </header>
 
+      {/* Startbildschirm */}
       {gamePhase === 'start' && (
         <div className="start-screen d-flex flex-column align-items-center justify-content-center">
           <div className="card p-4 shadow-lg rounded-3">
@@ -164,6 +226,7 @@ function App() {
         </div>
       )}
 
+      {/* Spielbildschirm */}
       {gamePhase === 'playing' && playerData && (
         <div className="row">
           <div className="col-md-3 mb-4">
@@ -191,7 +254,14 @@ function App() {
                 setPlayerName('');
                 setCurrentRoll(null);
                 setIsGameOver(false);
-                setIsStartField(true); // NEU: Zurücksetzen des Zustands beim Neustart
+                setIsStartField(true); // Zurücksetzen des Zustands beim Neustart
+                
+                // Setze alle Felder außer dem Startfeld auf nicht aufgedeckt
+                const initialGameBoard = STATIC_GAME_BOARD.map((field, index) => ({
+                  ...field,
+                  isRevealed: index === 0 ? true : false 
+                }));
+                setGameBoard(initialGameBoard);
               }}
             >
               Neues Spiel
@@ -202,11 +272,11 @@ function App() {
             <div className="board-area d-flex flex-column align-items-center">
               {gameBoard.length > 0 ? (
                 <Board
-                  fields={gameBoard}
+                  fields={gameBoard} // gameBoard wird nun mit isRevealed-Flag übergeben
                   playerPosition={playerData.position}
                   onRollDice={handleRollDice}
                   diceValue={currentRoll}
-                  isStartField={isStartField} // NEU: Zustand an Board-Komponente übergeben
+                  isStartField={isStartField}
                 />
               ) : (
                 <p>Fehler beim Laden des Spielbretts oder Board ist leer.</p>
@@ -221,6 +291,7 @@ function App() {
         </div>
       )}
 
+      {/* Game Over Bildschirm */}
       {gamePhase === 'game_over' && (
         <div className="game-over-screen d-flex flex-column align-items-center justify-content-center">
           <div className="card p-5 shadow-lg rounded-3 text-center">
@@ -236,13 +307,33 @@ function App() {
                 setPlayerName('');
                 setCurrentRoll(null);
                 setIsGameOver(false);
-                setIsStartField(true); // NEU: Zurücksetzen des Zustands beim Neustart
+                setIsStartField(true); // Zurücksetzen des Zustands beim Neustart
+                
+                // Setze alle Felder außer dem Startfeld auf nicht aufgedeckt
+                const initialGameBoard = STATIC_GAME_BOARD.map((field, index) => ({
+                  ...field,
+                  isRevealed: index === 0 ? true : false 
+                }));
+                setGameBoard(initialGameBoard);
               }}
             >
               Neues Spiel starten
             </button>
           </div>
         </div>
+      )}
+
+      {/* NEU: Event-Modal */}
+      {showEventModal && modalField && (
+        <EventModal
+          isOpen={showEventModal}
+          onClose={handleModalClose}
+          field={modalField}
+          input={modalInput}
+          onInputChange={setModalInput}
+          onAnswerSubmit={handleAnswerSubmit}
+          modalMessage={modalMessage}
+        />
       )}
     </div>
   );

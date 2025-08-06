@@ -96,3 +96,253 @@ header h1 {
   border-top: none;
   justify-content: center;
 }
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Dies ist die Verdunkelung des Hintergrunds, nicht des Modals selbst */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Content Box */
+.modal-content {
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  animation: fadeIn 0.3s ease-out;
+  /* Standard-Hintergrundfarbe, wird von spezifischen Typen überschrieben */
+  background-color: #ffffff; /* Sicherstellen, dass es standardmäßig undurchsichtig ist */
+  color: #333; /* Standard-Textfarbe */
+}
+
+/* Modal Header */
+.modal-header {
+  margin-bottom: 20px;
+}
+
+.modal-header h2 {
+  font-size: 1.8rem;
+  color: #333; /* Standard-Überschriftenfarbe */
+  margin-bottom: 10px;
+}
+
+/* Modal Body */
+.modal-body p {
+  font-size: 1.1rem;
+  color: #555; /* Standard-Absatzfarbe */
+  margin-bottom: 15px;
+}
+
+/* Modal Input */
+.modal-input {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333; /* Textfarbe für Input-Feld */
+  background-color: #f8f8f8; /* Leichter Hintergrund für Input-Feld */
+}
+
+/* Modal Buttons */
+.modal-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  margin: 5px; /* Abstand zwischen Buttons */
+}
+
+.modal-button.primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-button.primary:hover {
+  background-color: #0056b3;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.modal-button.danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.modal-button.danger:hover {
+  background-color: #c82333;
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Close Button */
+.modal-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.modal-close-button:hover {
+  color: #333;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Feedback-Nachrichten im Modal */
+.modal-feedback {
+  margin-top: 10px;
+  font-weight: bold;
+}
+.modal-feedback.success { color: #28a745; }
+.modal-feedback.error { color: #dc3545; }
+
+
+/* --- SPEZIFISCHE ANPASSUNGEN FÜR MALWARE MODAL --- */
+.modal-malware .modal-content {
+  background-color: #dc3545; /* Hintergrund des Modals rot */
+  border: 2px solid #a71d2a; /* Dunklerer roter Rand */
+  color: white; /* Textfarbe weiß für bessere Lesbarkeit */
+}
+
+.modal-malware .modal-header h2 {
+  color: white; /* Überschrift weiß */
+  font-size: 2.2rem;
+  font-weight: bold;
+}
+
+.modal-malware .modal-body p {
+  color: white; /* Absatztext weiß */
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.modal-malware .modal-input {
+  background-color: rgba(255, 255, 255, 0.8); /* Hellerer Hintergrund für Input-Feld */
+  color: #333; /* Dunklerer Text für Input-Feld */
+}
+
+.modal-malware .modal-button.danger {
+  background-color: #ff0000; /* Leuchtendes Rot für Button */
+  color: white;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
+}
+
+.modal-malware .modal-button.danger:hover {
+  background-color: #cc0000;
+  box-shadow: 0 6px 12px rgba(255, 0, 0, 0.4);
+}
+
+.modal-malware .modal-close-button {
+  color: white; /* Schließen-Button weiß */
+}
+.modal-malware .modal-close-button:hover {
+  color: #f8f8f8;
+}
+
+
+/* --- SPEZIFISCHE ANPASSUNGEN FÜR QUESTION/RIDDLE MODAL --- */
+.modal-question .modal-content,
+.modal-riddle .modal-content {
+  background-color: #ffc107; /* Hintergrund des Modals gelb/orange */
+  border: 2px solid #e0a800; /* Dunklerer gelber/oranger Rand */
+  color: #333; /* Textfarbe dunkel für bessere Lesbarkeit auf hellem Hintergrund */
+}
+
+.modal-question .modal-header h2,
+.modal-riddle .modal-header h2 {
+  color: #333; /* Überschrift dunkel */
+}
+
+.modal-question .modal-body p,
+.modal-riddle .modal-body p {
+  color: #333; /* Absatztext dunkel */
+}
+
+.modal-question .modal-input,
+.modal-riddle .modal-input {
+  background-color: rgba(255, 255, 255, 0.8); /* Hellerer Hintergrund für Input-Feld */
+  color: #333; /* Dunklerer Text für Input-Feld */
+}
+
+.modal-question .modal-button.primary,
+.modal-riddle .modal-button.primary {
+  background-color: #e0a800; /* Angepasster gelber/oranger Button */
+  color: white;
+}
+
+.modal-question .modal-button.primary:hover,
+.modal-riddle .modal-button.primary:hover {
+  background-color: #c69500;
+  box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+.modal-question .modal-close-button,
+.modal-riddle .modal-close-button {
+  color: #333; /* Schließen-Button dunkel */
+}
+.modal-question .modal-close-button:hover,
+.modal-riddle .modal-close-button:hover {
+  color: #000;
+}
+
+/* Feedback-Nachrichten im Modal (spezifisch für Frage/Rätsel) */
+.modal-question .modal-feedback.success,
+.modal-riddle .modal-feedback.success { 
+  color: #28a745; /* Grün für Erfolg */
+}
+.modal-question .modal-feedback.error,
+.modal-riddle .modal-feedback.error { 
+  color: #dc3545; /* Rot für Fehler */
+}
