@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Board from './Board.jsx';
 import './App.css';
-import EventModal from './EventModal.jsx'; // NEU: EventModal importieren
+import EventModal from './EventModal.jsx';
+import RulesModal from './RulesModal.jsx'; // NEU: RulesModal importieren
 
 // Hardgecodierte Board-Daten, da das Backend keinen Endpunkt dafür bereitstellt
 const STATIC_GAME_BOARD = [
@@ -51,11 +52,15 @@ function App() {
   const [gamePhase, setGamePhase] = useState('start');
   const [isStartField, setIsStartField] = useState(true); 
 
-  // NEUE ZUSTÄNDE FÜR DAS MODAL
+  // ZUSTÄNDE FÜR DAS EVENT-MODAL
   const [showEventModal, setShowEventModal] = useState(false);
-  const [modalField, setModalField] = useState(null); // Speichert das vollständige Feld-Objekt
+  const [modalField, setModalField] = useState(null);
   const [modalInput, setModalInput] = useState('');
-  const [modalMessage, setModalMessage] = useState(''); // Für Feedback im Modal (richtig/falsch)
+  const [modalMessage, setModalMessage] = useState('');
+
+  // NEUE ZUSTÄNDE FÜR DAS REGEL-MODAL
+  const [showRulesModal, setShowRulesModal] = useState(false);
+  const [rulesContent, setRulesContent] = useState('');
 
   const handleStartGame = async () => {
     if (!playerName.trim()) {
@@ -119,7 +124,6 @@ function App() {
         setIsStartField(true); 
       }
 
-      // Spielerdaten sofort aktualisieren, da das Backend Effekte anwendet
       setPlayerData(prevData => ({
         ...prevData,
         position: newPosition,
@@ -160,7 +164,7 @@ function App() {
     }
   };
 
-  // MODAL-HANDLER
+  // MODAL-HANDLER FÜR EVENTS
   const handleModalClose = () => {
     setShowEventModal(false);
     setModalField(null);
@@ -170,26 +174,73 @@ function App() {
     if (modalField) {
       let message = modalField.description || "Du hast ein unbekanntes Feld betreten.";
       if (modalField.type === 'question' || modalField.type === 'riddle') {
-        message += " (Antwort in Konsole prüfen)"; // Hinweis, wo die Antwort verarbeitet wurde
+        // Da die Antwort im Backend verarbeitet wird, können wir hier keine direkte Erfolgsmeldung anzeigen
+        // Die Punkte werden durch das nächste playerData-Update vom Backend reflektiert
+        message += " (Antwort verarbeitet)"; 
       }
       setGameMessage(message);
     }
   };
 
-  const handleAnswerSubmit = () => {
+  const handleAnswerSubmit = async () => {
     if (modalField && (modalField.type === 'question' || modalField.type === 'riddle')) {
-      const isCorrect = modalInput.trim().toLowerCase() === modalField.answer.trim().toLowerCase();
-      if (isCorrect) {
-        setModalMessage("Richtig! Du erhältst " + modalField.reward + " Datenpunkt(e).");
-        // Punkte werden bereits vom Backend aktualisiert, daher hier kein Frontend-Update nötig.
-      } else {
-        setModalMessage("Falsch beantwortet. Kein Bonus.");
+      // Senden der Antwort an das Backend zur Überprüfung
+      try {
+        const response = await fetch(`${API_BASE_URL}/answer`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            answer: modalInput, 
+            question_field_index: playerData.position // Senden der aktuellen Feldposition
+          }),
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        // Aktualisiere Spielerdaten basierend auf Backend-Antwort
+        setPlayerData(prevData => ({
+          ...prevData,
+          data_points: data.data_points
+        }));
+
+        setModalMessage(data.message); // Backend sollte "Richtig!" oder "Falsch!" zurückgeben
+
+        // Feedback für 1.5 Sekunden anzeigen, dann Modal schließen
+        setTimeout(() => {
+          handleModalClose();
+        }, 1500); 
+
+      } catch (error) {
+        console.error("Fehler beim Senden der Antwort:", error);
+        setModalMessage("Fehler beim Senden der Antwort.");
+        setTimeout(() => {
+          handleModalClose();
+        }, 1500); 
       }
     }
-    // Feedback für 1.5 Sekunden anzeigen, dann Modal schließen
-    setTimeout(() => {
-      handleModalClose();
-    }, 1500); 
+  };
+
+  // NEUE FUNKTIONEN FÜR REGEL-MODAL
+  const handleShowRules = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/rules`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setRulesContent(data.rules);
+      setShowRulesModal(true);
+    } catch (error) {
+      console.error("Fehler beim Laden der Regeln:", error);
+      setGameMessage("Fehler beim Laden der Regeln.");
+    }
+  };
+
+  const handleCloseRulesModal = () => {
+    setShowRulesModal(false);
+    setRulesContent('');
   };
 
   return (
@@ -216,10 +267,16 @@ function App() {
               />
             </div>
             <button
-              className="btn btn-primary btn-lg rounded-pill w-100"
+              className="btn btn-primary btn-lg rounded-pill w-100 mb-3" // Abstand hinzugefügt
               onClick={handleStartGame}
             >
               Spiel starten
+            </button>
+            <button
+              className="btn btn-info btn-lg w-100 rounded-pill" // NEU: Regeln-Button
+              onClick={handleShowRules}
+            >
+              Regeln anzeigen
             </button>
             {gameMessage && <p className="text-danger mt-3 text-center">{gameMessage}</p>}
           </div>
@@ -246,7 +303,7 @@ function App() {
               </div>
             )}
             <button
-              className="btn btn-success btn-lg w-100 rounded-pill mt-3"
+              className="btn btn-success btn-lg w-100 rounded-pill mt-3 mb-3" // Abstand hinzugefügt
               onClick={() => {
                 setGamePhase('start');
                 setPlayerData(null);
@@ -266,13 +323,19 @@ function App() {
             >
               Neues Spiel
             </button>
+            <button
+              className="btn btn-info btn-lg w-100 rounded-pill" // NEU: Regeln-Button im Spielbildschirm
+              onClick={handleShowRules}
+            >
+              Regeln anzeigen
+            </button>
           </div>
 
           <div className="col-md-9">
             <div className="board-area d-flex flex-column align-items-center">
               {gameBoard.length > 0 ? (
                 <Board
-                  fields={gameBoard} // gameBoard wird nun mit isRevealed-Flag übergeben
+                  fields={gameBoard}
                   playerPosition={playerData.position}
                   onRollDice={handleRollDice}
                   diceValue={currentRoll}
@@ -299,7 +362,7 @@ function App() {
             <p className="lead">{gameMessage}</p>
             <p className="fs-4">Deine erreichten Datenpunkte: <span className="fw-bold">{playerData?.data_points || 0}</span></p>
             <button
-              className="btn btn-success btn-lg rounded-pill mt-4 w-100"
+              className="btn btn-success btn-lg rounded-pill mt-4 w-100 mb-3" // Abstand hinzugefügt
               onClick={() => {
                 setGamePhase('start');
                 setPlayerData(null);
@@ -319,11 +382,17 @@ function App() {
             >
               Neues Spiel starten
             </button>
+            <button
+              className="btn btn-info btn-lg w-100 rounded-pill" // NEU: Regeln-Button im Game Over Bildschirm
+              onClick={handleShowRules}
+            >
+              Regeln anzeigen
+            </button>
           </div>
         </div>
       )}
 
-      {/* NEU: Event-Modal */}
+      {/* Event-Modal */}
       {showEventModal && modalField && (
         <EventModal
           isOpen={showEventModal}
@@ -335,8 +404,18 @@ function App() {
           modalMessage={modalMessage}
         />
       )}
+
+      {/* NEU: Regeln-Modal */}
+      {showRulesModal && (
+        <RulesModal
+          isOpen={showRulesModal}
+          onClose={handleCloseRulesModal}
+          rules={rulesContent}
+        />
+      )}
     </div>
   );
 }
 
 export default App;
+

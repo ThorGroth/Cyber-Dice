@@ -1,9 +1,8 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css");
 
-/* Globale Stile für die App */
 body {
   font-family: "Inter", sans-serif;
-  background-color: #f8f9fa; /* Heller Hintergrund */
+  background-color: #f8f9fa;
 }
 
 .game-container {
@@ -13,23 +12,25 @@ body {
 }
 
 header h1 {
-  color: #007bff; /* Primärfarbe für den Titel */
+  color: #007bff;
 }
 
-.start-screen, .game-over-screen {
+.start-screen,
+.game-over-screen {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); 
-  z-index: 1000; 
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.start-screen .card, .game-over-screen .card {
+.start-screen .card,
+.game-over-screen .card {
   background-color: white;
   padding: 3rem;
   border-radius: 15px;
@@ -39,12 +40,12 @@ header h1 {
 }
 
 .player-card {
-  background: linear-gradient(45deg, #007bff, #0056b3); 
+  background: linear-gradient(45deg, #007bff, #0056b3);
   border: none;
 }
 
 .dice-roll-card {
-  background: linear-gradient(45deg, #17a2b8, #138496); 
+  background: linear-gradient(45deg, #17a2b8, #138496);
   border: none;
 }
 
@@ -53,6 +54,7 @@ header h1 {
   border-color: #007bff;
   transition: all 0.2s ease-in-out;
 }
+
 .btn-primary:hover {
   background-color: #0056b3;
   border-color: #0056b3;
@@ -63,9 +65,10 @@ header h1 {
 .btn-warning {
   background-color: #ffc107;
   border-color: #ffc107;
-  color: #343a40; 
+  color: #343a40;
   transition: all 0.2s ease-in-out;
 }
+
 .btn-warning:hover {
   background-color: #e0a800;
   border-color: #e0a800;
@@ -78,6 +81,7 @@ header h1 {
   border-color: #28a745;
   transition: all 0.2s ease-in-out;
 }
+
 .btn-success:hover {
   background-color: #218838;
   border-color: #1e7e34;
@@ -85,18 +89,21 @@ header h1 {
   box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
 }
 
-/* Modal-Anpassungen */
+/* Modal-Anpassungen  */
 .modal-content {
   border: none;
 }
+
 .modal-header {
   border-bottom: none;
 }
+
 .modal-footer {
   border-top: none;
   justify-content: center;
 }
-/* Modal Overlay */
+
+/* Modal Overlay  */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -104,34 +111,6 @@ header h1 {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-/* Modal Overlay */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-/* Modal Overlay */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7); /* Dies ist die Verdunkelung des Hintergrunds, nicht des Modals selbst */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -148,9 +127,8 @@ header h1 {
   text-align: center;
   position: relative;
   animation: fadeIn 0.3s ease-out;
-  /* Standard-Hintergrundfarbe, wird von spezifischen Typen überschrieben */
-  background-color: #ffffff; /* Sicherstellen, dass es standardmäßig undurchsichtig ist */
-  color: #333; /* Standard-Textfarbe */
+  background-color: #ffffff;
+  color: #333;
 }
 
 /* Modal Header */
@@ -160,14 +138,14 @@ header h1 {
 
 .modal-header h2 {
   font-size: 1.8rem;
-  color: #333; /* Standard-Überschriftenfarbe */
+  color: #333;
   margin-bottom: 10px;
 }
 
 /* Modal Body */
 .modal-body p {
   font-size: 1.1rem;
-  color: #555; /* Standard-Absatzfarbe */
+  color: #555;
   margin-bottom: 15px;
 }
 
@@ -179,8 +157,8 @@ header h1 {
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
-  color: #333; /* Textfarbe für Input-Feld */
-  background-color: #f8f8f8; /* Leichter Hintergrund für Input-Feld */
+  color: #333;
+  background-color: #f8f8f8;
 }
 
 /* Modal Buttons */
@@ -192,7 +170,7 @@ header h1 {
   font-size: 1rem;
   font-weight: bold;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
-  margin: 5px; /* Abstand zwischen Buttons */
+  margin: 5px;
 }
 
 .modal-button.primary {
@@ -233,8 +211,15 @@ header h1 {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Feedback-Nachrichten im Modal */
@@ -242,107 +227,154 @@ header h1 {
   margin-top: 10px;
   font-weight: bold;
 }
-.modal-feedback.success { color: #28a745; }
-.modal-feedback.error { color: #dc3545; }
+
+.modal-feedback.success {
+  color: #28a745;
+}
+
+.modal-feedback.error {
+  color: #dc3545;
+}
 
 
 /* --- SPEZIFISCHE ANPASSUNGEN FÜR MALWARE MODAL --- */
-.modal-malware .modal-content {
-  background-color: #dc3545; /* Hintergrund des Modals rot */
-  border: 2px solid #a71d2a; /* Dunklerer roter Rand */
-  color: white; /* Textfarbe weiß für bessere Lesbarkeit */
+.modal-malware.modal-content {
+  background-color: #dc3545;
+  border: 2px solid #a71d2a;
+  color: white;
 }
 
 .modal-malware .modal-header h2 {
-  color: white; /* Überschrift weiß */
+  color: white;
   font-size: 2.2rem;
   font-weight: bold;
 }
 
 .modal-malware .modal-body p {
-  color: white; /* Absatztext weiß */
+  color: white;
   font-size: 1.2rem;
   font-weight: bold;
 }
 
 .modal-malware .modal-input {
-  background-color: rgba(255, 255, 255, 0.8); /* Hellerer Hintergrund für Input-Feld */
-  color: #333; /* Dunklerer Text für Input-Feld */
-}
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #333;
 
-.modal-malware .modal-button.danger {
-  background-color: #ff0000; /* Leuchtendes Rot für Button */
-  color: white;
-  padding: 12px 25px;
-  font-size: 1.1rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
-}
+  .modal-malware .modal-button.danger {
+    background-color: #ff0000;
+    color: white;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
+  }
 
-.modal-malware .modal-button.danger:hover {
-  background-color: #cc0000;
-  box-shadow: 0 6px 12px rgba(255, 0, 0, 0.4);
-}
+  .modal-malware .modal-button.danger:hover {
+    background-color: #cc0000;
+    box-shadow: 0 6px 12px rgba(255, 0, 0, 0.4);
+  }
 
-.modal-malware .modal-close-button {
-  color: white; /* Schließen-Button weiß */
-}
-.modal-malware .modal-close-button:hover {
-  color: #f8f8f8;
-}
+  .modal-malware .modal-close-button {
+    color: white;
+  }
+
+  .modal-malware .modal-close-button:hover {
+    color: #f8f8f8;
+  }
 
 
-/* --- SPEZIFISCHE ANPASSUNGEN FÜR QUESTION/RIDDLE MODAL --- */
-.modal-question .modal-content,
-.modal-riddle .modal-content {
-  background-color: #ffc107; /* Hintergrund des Modals gelb/orange */
-  border: 2px solid #e0a800; /* Dunklerer gelber/oranger Rand */
-  color: #333; /* Textfarbe dunkel für bessere Lesbarkeit auf hellem Hintergrund */
-}
+  /* --- SPEZIFISCHE ANPASSUNGEN FÜR QUESTION/RIDDLE MODAL --- */
+  .modal-question.modal-content,
+  .modal-riddle.modal-content {
+    background-color: #ffc107;
+    border: 2px solid #e0a800;
+    color: #333;
+  }
 
-.modal-question .modal-header h2,
-.modal-riddle .modal-header h2 {
-  color: #333; /* Überschrift dunkel */
-}
+  .modal-question .modal-header h2,
+  .modal-riddle .modal-header h2 {
+    color: #333;
+  }
 
-.modal-question .modal-body p,
-.modal-riddle .modal-body p {
-  color: #333; /* Absatztext dunkel */
-}
+  .modal-question .modal-body p,
+  .modal-riddle .modal-body p {
+    color: #333;
+  }
 
-.modal-question .modal-input,
-.modal-riddle .modal-input {
-  background-color: rgba(255, 255, 255, 0.8); /* Hellerer Hintergrund für Input-Feld */
-  color: #333; /* Dunklerer Text für Input-Feld */
-}
+  .modal-question .modal-input,
+  .modal-riddle .modal-input {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #333;
+  }
 
-.modal-question .modal-button.primary,
-.modal-riddle .modal-button.primary {
-  background-color: #e0a800; /* Angepasster gelber/oranger Button */
-  color: white;
-}
+  .modal-question .modal-button.primary,
+  .modal-riddle .modal-button.primary {
+    background-color: #e0a800;
+    color: white;
+  }
 
-.modal-question .modal-button.primary:hover,
-.modal-riddle .modal-button.primary:hover {
-  background-color: #c69500;
-  box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
-}
+  .modal-question .modal-button.primary:hover,
+  .modal-riddle .modal-button.primary:hover {
+    background-color: #c69500;
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+  }
 
-.modal-question .modal-close-button,
-.modal-riddle .modal-close-button {
-  color: #333; /* Schließen-Button dunkel */
-}
-.modal-question .modal-close-button:hover,
-.modal-riddle .modal-close-button:hover {
-  color: #000;
-}
+  .modal-question .modal-close-button,
+  .modal-riddle .modal-close-button {
+    color: #333;
+  }
 
-/* Feedback-Nachrichten im Modal (spezifisch für Frage/Rätsel) */
-.modal-question .modal-feedback.success,
-.modal-riddle .modal-feedback.success { 
-  color: #28a745; /* Grün für Erfolg */
-}
-.modal-question .modal-feedback.error,
-.modal-riddle .modal-feedback.error { 
-  color: #dc3545; /* Rot für Fehler */
+  .modal-question .modal-close-button:hover,
+  .modal-riddle .modal-close-button:hover {
+    color: #000;
+  }
+
+  /* Feedback-Nachrichten im Modal */
+  .modal-question .modal-feedback.success,
+  .modal-riddle .modal-feedback.success {
+    color: #28a745;
+  }
+
+  .modal-question .modal-feedback.error,
+  .modal-riddle .modal-feedback.error {
+    color: #dc3545;
+
+    /* Regeln-Modal spezifische Stile */
+    .rules-modal-content {
+      background-color: #ffffff !important;
+      border: 2px solid #6c757d;
+      color: #333;
+      text-align: left;
+    }
+
+    .rules-modal-content .modal-header h2 {
+      color: #007bff;
+    }
+
+    .rules-modal-content .modal-body p {
+      color: #333;
+      white-space: pre-wrap;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .rules-modal-content .modal-button.primary {
+      background-color: #007bff;
+    }
+
+    .rules-modal-content .modal-button.primary:hover {
+      background-color: #0056b3;
+    }
+
+    .rules-modal-content .modal-close-button {
+      color: #6c757d;
+    }
+
+    .rules-modal-content .modal-close-button:hover {
+      color: #333;
+    }
+
+
+  }
 }

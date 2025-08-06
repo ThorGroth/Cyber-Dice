@@ -3,6 +3,8 @@ import React from 'react';
 const EventModal = ({ isOpen, onClose, field, input, onInputChange, onAnswerSubmit, modalMessage }) => {
   if (!isOpen) return null;
 
+    console.log("EventModal received field data:", field);
+
   const modalTypeClass = field.type === 'malware' ? 'modal-malware' : (field.type === 'question' || field.type === 'riddle' ? 'modal-question' : '');
 
   return (
@@ -14,13 +16,19 @@ const EventModal = ({ isOpen, onClose, field, input, onInputChange, onAnswerSubm
           {(field.type === 'question' || field.type === 'riddle') && <h2>Frage/Rätsel!</h2>}
         </div>
         <div className="modal-body">
-          <p>{field.description}</p>
+          {/* Anzeige für Malware-Felder */}
           {field.type === 'malware' && (
-            <p>Du verlierst {Math.abs(field.effect)} Datenpunkt(e).</p>
+            <>
+              <p>{field.description}</p>
+              <p>Du verlierst {Math.abs(field.effect)} Datenpunkt(e).</p>
+              <button className="modal-button danger" onClick={onClose}>OK</button>
+            </>
           )}
+          {/* Anzeige für Fragen- und Rätsel-Felder */}
           {(field.type === 'question' || field.type === 'riddle') && (
             <>
-              <p className="question-text">{field.question}</p>
+              {/* Hier wird die Frage angezeigt. Fallback auf Beschreibung, falls 'question' fehlt. */}
+              <p className="question-text">{field.question || field.description || "Keine Frage verfügbar."}</p>
               <input
                 type="text"
                 className="modal-input"
@@ -35,9 +43,6 @@ const EventModal = ({ isOpen, onClose, field, input, onInputChange, onAnswerSubm
                 </p>
               )}
             </>
-          )}
-          {field.type === 'malware' && (
-            <button className="modal-button danger" onClick={onClose}>OK</button>
           )}
         </div>
       </div>

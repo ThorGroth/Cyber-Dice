@@ -2,23 +2,21 @@
 .board-grid-container {
   display: grid;
   /* 9 Spalten und 8 Reihen mit einer festen Größe, um gleichmäßige Vierecke zu erzwingen */
-  grid-template-columns: repeat(9, 80px); /* Jede Spalte 80px breit */
-  grid-template-rows: repeat(8, 80px); /* Jede Reihe 80px hoch */
-  /* Lücken zwischen den Grid-Zellen */
+  grid-template-columns: repeat(9, 80px); 
+  grid-template-rows: repeat(8, 80px); 
   gap: 2px;
   /* Die Gesamtbreite und Höhe des Containers berechnen */
   width: calc(9 * 80px + 8 * 2px);
   height: calc(8 * 80px + 7 * 2px);
   margin: auto;
   position: relative;
-  /* Padding, um einen Rand zum äußeren Container zu schaffen */
   padding: 0;
   border: 2px solid #333;
   border-radius: 10px;
   background-color: #f0f0f0;
 }
 
-/* Wichtig: Positioniere den Würfel über dem inneren Bereich */
+/* Positioniert den Würfel über dem inneren Bereich */
 .dice-center-field {
   grid-area: 2 / 2 / span 6 / span 7;
   background-color: transparent;
