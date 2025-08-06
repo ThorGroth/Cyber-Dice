@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Board from './Board.jsx';
 import './App.css';
 
-// Hardgecodierte Board-Daten, da das Backend keinen Endpunkt dafür bereitstellt
+// Das Start-/Zielfeld (goal) ist jetzt der erste Eintrag im Array (Index 0)
 const STATIC_GAME_BOARD = [
-  { "type": "empty", "description": "Du startest deine Reise im Cyberspace." },
+  { "type": "goal", "description": "Ziel erreicht, sicheres System betreten!" }, // Index 0: Das grüne Start-/Zielfeld
   { "type": "malware", "description": "Malware entdeckt, du verlierst 2 Datenpunkte.", "effect": -2 },
   { "type": "question", "description": "Was ist ein Hash?", "question": "Was ist ein Hash?", "answer": "eine Prüfsumme", "reward": 1 },
   { "type": "empty", "description": "Du hast ein Sicherheitsupdate installiert." },
@@ -35,13 +35,12 @@ const STATIC_GAME_BOARD = [
   { "type": "riddle", "description": "Je mehr du davon teilst, desto weniger hast du. Was ist es?", "question": "Was verliert man durchs Teilen?", "answer": "Geheimnis", "reward": 1 },
   { "type": "malware", "description": "Rootkit-Alarm, du verlierst 2 Datenpunkte.", "effect": -2 },
   { "type": "empty", "description": "Du hast eine verdächtige Mail gelöscht, gute Entscheidung." },
-  { "type": "goal", "description": "Ziel erreicht, sicheres System betreten!" }
+  { "type": "empty", "description": "Du startest deine Reise im Cyberspace." } // Das alte Startfeld, jetzt am Ende
 ];
 
 const API_BASE_URL = 'http://localhost:8000';
 
 function App() {
-  // === Zustandsvariablen ===
   const [playerName, setPlayerName] = useState('');
   const [playerData, setPlayerData] = useState(null);
   const [gameBoard, setGameBoard] = useState(STATIC_GAME_BOARD);
@@ -49,8 +48,7 @@ function App() {
   const [currentRoll, setCurrentRoll] = useState(null);
   const [isGameOver, setIsGameOver] = useState(false);
   const [gamePhase, setGamePhase] = useState('start');
-
-  // === Event-Handler und API-Aufrufe ===
+  const [isStartField, setIsStartField] = useState(true); // NEUER ZUSTAND: True, wenn Spieler auf Startfeld (Index 0)
 
   const handleStartGame = async () => {
     if (!playerName.trim()) {
@@ -69,13 +67,14 @@ function App() {
       const data = await response.json();
       setPlayerData({
         name: playerName,
-        position: data.position,
+        position: 0, // Spieler startet bei Index 0 (dem grünen Feld)
         data_points: data.data_points
       });
       setGameMessage(data.message);
       setGamePhase('playing');
       setIsGameOver(false);
       setCurrentRoll(null);
+      setIsStartField(true); // Spieler ist auf dem Startfeld
     } catch (error) {
       console.error("Fehler beim Starten des Spiels:", error);
       setGameMessage("Fehler beim Starten des Spiels.");
@@ -96,10 +95,19 @@ function App() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      
+      const newPosition = data.new_position;
+
+      // Wenn der Spieler das Startfeld (Index 0) verlässt
+      if (newPosition !== 0) {
+        setIsStartField(false); 
+      } else {
+        setIsStartField(true); // Bleibt auf dem Startfeld (z.B. bei 0-Wurf)
+      }
 
       setPlayerData(prevData => ({
         ...prevData,
-        position: data.new_position,
+        position: newPosition,
         data_points: data.data_points
       }));
       setCurrentRoll(data.roll);
@@ -123,8 +131,6 @@ function App() {
     }
   };
 
-  // === Rendern der UI basierend auf der Spielphase ===
-
   return (
     <div className="container-fluid p-4 game-container">
       <header className="text-center mb-4">
@@ -132,7 +138,6 @@ function App() {
         <p className="lead text-muted">Das IT-Quiz-Würfelspiel</p>
       </header>
 
-      {/* Startbildschirm */}
       {gamePhase === 'start' && (
         <div className="start-screen d-flex flex-column align-items-center justify-content-center">
           <div className="card p-4 shadow-lg rounded-3">
@@ -159,10 +164,8 @@ function App() {
         </div>
       )}
 
-      {/* Spielbildschirm */}
       {gamePhase === 'playing' && playerData && (
         <div className="row">
-          {/* Linke Seitenleiste: Spielerstatus und Neues Spiel Button */}
           <div className="col-md-3 mb-4">
             <div className="card shadow-sm mb-3 rounded-3 player-card bg-primary text-white">
               <div className="card-body">
@@ -188,21 +191,22 @@ function App() {
                 setPlayerName('');
                 setCurrentRoll(null);
                 setIsGameOver(false);
+                setIsStartField(true); // NEU: Zurücksetzen des Zustands beim Neustart
               }}
             >
               Neues Spiel
             </button>
           </div>
 
-          {/* Hauptbereich: Spielbrett und Würfel */}
           <div className="col-md-9">
             <div className="board-area d-flex flex-column align-items-center">
               {gameBoard.length > 0 ? (
-                <Board 
-                  fields={gameBoard} 
-                  playerPosition={playerData.position} 
-                  onRollDice={handleRollDice} 
-                  diceValue={currentRoll} 
+                <Board
+                  fields={gameBoard}
+                  playerPosition={playerData.position}
+                  onRollDice={handleRollDice}
+                  diceValue={currentRoll}
+                  isStartField={isStartField} // NEU: Zustand an Board-Komponente übergeben
                 />
               ) : (
                 <p>Fehler beim Laden des Spielbretts oder Board ist leer.</p>
@@ -217,7 +221,6 @@ function App() {
         </div>
       )}
 
-      {/* Game Over Bildschirm */}
       {gamePhase === 'game_over' && (
         <div className="game-over-screen d-flex flex-column align-items-center justify-content-center">
           <div className="card p-5 shadow-lg rounded-3 text-center">
@@ -233,6 +236,7 @@ function App() {
                 setPlayerName('');
                 setCurrentRoll(null);
                 setIsGameOver(false);
+                setIsStartField(true); // NEU: Zurücksetzen des Zustands beim Neustart
               }}
             >
               Neues Spiel starten
@@ -240,7 +244,6 @@ function App() {
           </div>
         </div>
       )}
-
     </div>
   );
 }
