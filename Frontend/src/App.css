@@ -3,49 +3,51 @@
 /* Globale Stile für die App */
 body {
   font-family: "Inter", sans-serif;
-  background-color: #f8f9fa; 
+  background-color: #f8f9fa;
 }
 
 .game-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  position: relative; 
+  position: relative;
 }
 
 header h1 {
-  color: #007bff; 
+  color: #007bff;
 }
 
 /* Stile für das Modal-Overlay, damit es den ganzen Bildschirm bedeckt */
 .modal-overlay {
-  position: fixed; 
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); 
-  z-index: 1050;
-  display: flex; 
-  align-items: center;
-  justify-content: center;
-}
-
-
-.start-screen, .game-over-screen {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); 
-  z-index: 1000; 
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1050;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.start-screen .card, .game-over-screen .card {
+
+.start-screen,
+.game-over-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.start-screen .card,
+.game-over-screen .card {
   background-color: white;
   padding: 3rem;
   border-radius: 15px;
@@ -55,12 +57,12 @@ header h1 {
 }
 
 .player-card {
-  background: linear-gradient(45deg, #007bff, #0056b3); 
+  background: linear-gradient(45deg, #007bff, #0056b3);
   border: none;
 }
 
 .dice-roll-card {
-  background: linear-gradient(45deg, #17a2b8, #138496); 
+  background: linear-gradient(45deg, #17a2b8, #138496);
   border: none;
 }
 
@@ -69,6 +71,7 @@ header h1 {
   border-color: #007bff;
   transition: all 0.2s ease-in-out;
 }
+
 .btn-primary:hover {
   background-color: #0056b3;
   border-color: #0056b3;
@@ -79,9 +82,10 @@ header h1 {
 .btn-warning {
   background-color: #ffc107;
   border-color: #ffc107;
-  color: #343a40; 
+  color: #343a40;
   transition: all 0.2s ease-in-out;
 }
+
 .btn-warning:hover {
   background-color: #e0a800;
   border-color: #e0a800;
@@ -94,6 +98,7 @@ header h1 {
   border-color: #28a745;
   transition: all 0.2s ease-in-out;
 }
+
 .btn-success:hover {
   background-color: #218838;
   border-color: #1e7e34;
@@ -109,16 +114,16 @@ header h1 {
   max-width: 500px;
   width: 90%;
   text-align: center;
-  position: relative; 
+  position: relative;
   animation: fadeIn 0.3s ease-out;
-  background-color: #ffffff; 
-  color: #333; 
-  border: none; 
+  background-color: #ffffff;
+  color: #333;
+  border: none;
 }
 
 .modal-header {
   margin-bottom: 20px;
-  border-bottom: none; 
+  border-bottom: none;
 }
 
 .modal-header h2 {
@@ -191,44 +196,57 @@ header h1 {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .modal-feedback {
   margin-top: 10px;
   font-weight: bold;
 }
-.modal-feedback.success { color: #28a745; }
-.modal-feedback.error { color: #dc3545; }
+
+.modal-feedback.success {
+  color: #28a745;
+}
+
+.modal-feedback.error {
+  color: #dc3545;
+}
 
 
 /* --- SPEZIFISCHE ANPASSUNGEN FÜR MALWARE MODAL --- */
-.modal-malware.modal-content { 
-  background-color: #dc3545; 
-  border: 2px solid #a71d2a; 
-  color: white; 
+.modal-malware.modal-content {
+  background-color: #dc3545;
+  border: 2px solid #a71d2a;
+  color: white;
 }
 
 .modal-malware .modal-header h2 {
-  color: white; 
+  color: white;
   font-size: 2.2rem;
   font-weight: bold;
 }
 
 .modal-malware .modal-body p {
-  color: white; 
+  color: white;
   font-size: 1.2rem;
   font-weight: bold;
 }
 
 .modal-malware .modal-input {
-  background-color: rgba(255, 255, 255, 0.8); 
-  color: #333; 
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #333;
 }
 
-.modal-malware .modal-button.danger { 
-  background-color: #ff0000; 
+.modal-malware .modal-button.danger {
+  background-color: #ff0000;
   color: white;
   padding: 12px 25px;
   font-size: 1.1rem;
@@ -236,46 +254,47 @@ header h1 {
   box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
 }
 
-.modal-malware .modal-button.danger:hover { 
+.modal-malware .modal-button.danger:hover {
   background-color: #cc0000;
   box-shadow: 0 6px 12px rgba(255, 0, 0, 0.4);
 }
 
-.modal-malware .modal-close-button { 
-  color: white; 
+.modal-malware .modal-close-button {
+  color: white;
 }
+
 .modal-malware .modal-close-button:hover {
   color: #f8f8f8;
 }
 
 
 /* --- SPEZIFISCHE ANPASSUNGEN FÜR QUESTION/RIDDLE MODAL --- */
-.modal-question.modal-content, 
-.modal-riddle.modal-content { 
-  background-color: #ffc107; 
+.modal-question.modal-content,
+.modal-riddle.modal-content {
+  background-color: #ffc107;
   border: 2px solid #e0a800;
-  color: #333; 
+  color: #333;
 }
 
 .modal-question .modal-header h2,
 .modal-riddle .modal-header h2 {
-  color: #333; 
+  color: #333;
 }
 
 .modal-question .modal-body p,
 .modal-riddle .modal-body p {
-  color: #333; 
+  color: #333;
 }
 
 .modal-question .modal-input,
 .modal-riddle .modal-input {
-  background-color: rgba(255, 255, 255, 0.8); 
+  background-color: rgba(255, 255, 255, 0.8);
   color: #333;
 }
 
 .modal-question .modal-button.primary,
 .modal-riddle .modal-button.primary {
-  background-color: #e0a800; 
+  background-color: #e0a800;
   color: white;
 }
 
@@ -287,8 +306,9 @@ header h1 {
 
 .modal-question .modal-close-button,
 .modal-riddle .modal-close-button {
-  color: #333; 
+  color: #333;
 }
+
 .modal-question .modal-close-button:hover,
 .modal-riddle .modal-close-button:hover {
   color: #000;
@@ -296,32 +316,33 @@ header h1 {
 
 /* Feedback-Nachrichten im Modal */
 .modal-question .modal-feedback.success,
-.modal-riddle .modal-feedback.success { 
-  color: #28a745; 
+.modal-riddle .modal-feedback.success {
+  color: #28a745;
 }
+
 .modal-question .modal-feedback.error,
-.modal-riddle .modal-feedback.error { 
-  color: #dc3545; 
+.modal-riddle .modal-feedback.error {
+  color: #dc3545;
 }
 
 /* Regeln-Modal spezifische Stile */
 .rules-modal-content {
-  background-color: #ffffff !important; 
-  border: 2px solid #6c757d; 
+  background-color: #ffffff !important;
+  border: 2px solid #6c757d;
   color: #333;
-  text-align: left; 
+  text-align: left;
 }
 
 .rules-modal-content .modal-header h2 {
-  color: #007bff; 
+  color: #007bff;
 }
 
 .rules-modal-content .modal-body p {
   color: #333;
-  white-space: pre-wrap; 
-  max-height: 400px; 
-  overflow-y: auto; 
-  padding-right: 10px; 
+  white-space: pre-wrap;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
 .rules-modal-content .modal-button.primary {
@@ -335,22 +356,23 @@ header h1 {
 .rules-modal-content .modal-close-button {
   color: #6c757d;
 }
+
 .rules-modal-content .modal-close-button:hover {
   color: #333;
 }
 
 /* Stile für den Header oben mittig */
 .header-top-center {
-  position: absolute; 
-  top: 1rem; 
-  left: 50%; 
-  transform: translateX(-50%); 
-  z-index: 50; 
-  width: auto; 
-  white-space: nowrap; 
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  width: auto;
+  white-space: nowrap;
 }
 
 /* Anpassung für den header-Tag innerhalb von header-top-center, falls nötig */
 .header-top-center header {
-    margin-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }

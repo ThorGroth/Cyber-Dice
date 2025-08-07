@@ -50,7 +50,7 @@ function App() {
   const [currentRoll, setCurrentRoll] = useState(null);
   const [isGameOver, setIsGameOver] = useState(false);
   const [gamePhase, setGamePhase] = useState('start');
-  const [isStartField, setIsStartField] = useState(true); 
+  const [isStartField, setIsStartField] = useState(true);
 
   // ZUSTÄNDE FÜR DAS EVENT-MODAL
   const [showEventModal, setShowEventModal] = useState(false);
@@ -79,19 +79,19 @@ function App() {
       const data = await response.json();
       setPlayerData({
         name: playerName,
-        position: 0, // Spieler startet bei Index 0 (dem grünen Feld)
+        position: 0,
         data_points: data.data_points
       });
       setGameMessage(data.message);
       setGamePhase('playing');
       setIsGameOver(false);
       setCurrentRoll(null);
-      setIsStartField(true); // Spieler ist auf dem Startfeld
-      
+      setIsStartField(true);
+
       // Setze alle Felder außer dem Startfeld auf nicht aufgedeckt
       const initialGameBoard = STATIC_GAME_BOARD.map((field, index) => ({
         ...field,
-        isRevealed: index === 0 ? true : false // Nur Startfeld ist am Anfang aufgedeckt
+        isRevealed: index === 0 ? true : false
       }));
       setGameBoard(initialGameBoard);
 
@@ -115,13 +115,13 @@ function App() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      
+
       const newPosition = data.new_position;
 
       if (newPosition !== 0) {
-        setIsStartField(false); 
+        setIsStartField(false);
       } else {
-        setIsStartField(true); 
+        setIsStartField(true);
       }
 
       setPlayerData(prevData => ({
@@ -142,10 +142,11 @@ function App() {
 
       // MODAL-LOGIK: Zeige Modal für spezifische Feldtypen
       if (data.field.type === 'malware' || data.field.type === 'question' || data.field.type === 'riddle') {
-        setModalField(data.field); // Speichere das Feld, um es im Modal anzuzeigen
+        setModalField(data.field);
         setShowEventModal(true);
-        setModalMessage(''); // Modal-Nachricht zurücksetzen
-        setModalInput(''); // Modal-Eingabe zurücksetzen
+        setModalMessage('');
+        setModalInput('');
+        setGameMessage(''); // NEU: gameMessage leeren, wenn ein interaktives Modal geöffnet wird
       } else if (data.field.type === 'goal') {
         setGameMessage("Ziel erreicht – sicheres System betreten! Glückwunsch!");
         setIsGameOver(true);
@@ -170,16 +171,9 @@ function App() {
     setModalField(null);
     setModalInput('');
     setModalMessage('');
-    // Nach dem Schließen des Modals die Haupt-Spielnachricht aktualisieren
-    if (modalField) {
-      let message = modalField.description || "Du hast ein unbekanntes Feld betreten.";
-      if (modalField.type === 'question' || modalField.type === 'riddle') {
-        // Da die Antwort im Backend verarbeitet wird, können wir hier keine direkte Erfolgsmeldung anzeigen
-        // Die Punkte werden durch das nächste playerData-Update vom Backend reflektiert
-        message += " (Antwort verarbeitet)"; 
-      }
-      setGameMessage(message);
-    }
+    // ENTFERNT: Die Zeile, die gameMessage basierend auf modalField.description gesetzt hat.
+    // Die gameMessage wird jetzt nur noch von handleRollDice (für leere Felder)
+    // oder handleStartGame (für den Start) gesetzt.
   };
 
   const handleAnswerSubmit = async () => {
@@ -189,16 +183,16 @@ function App() {
         const response = await fetch(`${API_BASE_URL}/answer`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            answer: modalInput, 
-            question_field_index: playerData.position // Senden der aktuellen Feldposition
+          body: JSON.stringify({
+            answer: modalInput,
+            question_field_index: playerData.position
           }),
         });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        
+
         // Aktualisiere Spielerdaten basierend auf Backend-Antwort
         setPlayerData(prevData => ({
           ...prevData,
@@ -210,19 +204,19 @@ function App() {
         // Feedback für 1.5 Sekunden anzeigen, dann Modal schließen
         setTimeout(() => {
           handleModalClose();
-        }, 1500); 
+        }, 1500);
 
       } catch (error) {
         console.error("Fehler beim Senden der Antwort:", error);
         setModalMessage("Fehler beim Senden der Antwort.");
         setTimeout(() => {
           handleModalClose();
-        }, 1500); 
+        }, 1500);
       }
     }
   };
 
-  // NEUE FUNKTIONEN FÜR REGEL-MODAL
+  // FUNKTIONEN FÜR REGEL-MODAL
   const handleShowRules = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/rules`);
@@ -267,13 +261,13 @@ function App() {
               />
             </div>
             <button
-              className="btn btn-primary btn-lg rounded-pill w-100 mb-3" // Abstand hinzugefügt
+              className="btn btn-primary btn-lg rounded-pill w-100 mb-3"
               onClick={handleStartGame}
             >
               Spiel starten
             </button>
             <button
-              className="btn btn-info btn-lg w-100 rounded-pill" // NEU: Regeln-Button
+              className="btn btn-info btn-lg w-100 rounded-pill"
               onClick={handleShowRules}
             >
               Regeln anzeigen
@@ -303,7 +297,7 @@ function App() {
               </div>
             )}
             <button
-              className="btn btn-success btn-lg w-100 rounded-pill mt-3 mb-3" // Abstand hinzugefügt
+              className="btn btn-success btn-lg w-100 rounded-pill mt-3 mb-3"
               onClick={() => {
                 setGamePhase('start');
                 setPlayerData(null);
@@ -311,12 +305,12 @@ function App() {
                 setPlayerName('');
                 setCurrentRoll(null);
                 setIsGameOver(false);
-                setIsStartField(true); // Zurücksetzen des Zustands beim Neustart
-                
-                // Setze alle Felder außer dem Startfeld auf nicht aufgedeckt
+                setIsStartField(true);
+
+                // Beim Neustart das Board erneut initialisieren, falls es sich geändert hat
                 const initialGameBoard = STATIC_GAME_BOARD.map((field, index) => ({
                   ...field,
-                  isRevealed: index === 0 ? true : false 
+                  isRevealed: index === 0 ? true : false
                 }));
                 setGameBoard(initialGameBoard);
               }}
@@ -324,7 +318,7 @@ function App() {
               Neues Spiel
             </button>
             <button
-              className="btn btn-info btn-lg w-100 rounded-pill" // NEU: Regeln-Button im Spielbildschirm
+              className="btn btn-info btn-lg w-100 rounded-pill"
               onClick={handleShowRules}
             >
               Regeln anzeigen
@@ -362,7 +356,7 @@ function App() {
             <p className="lead">{gameMessage}</p>
             <p className="fs-4">Deine erreichten Datenpunkte: <span className="fw-bold">{playerData?.data_points || 0}</span></p>
             <button
-              className="btn btn-success btn-lg rounded-pill mt-4 w-100 mb-3" // Abstand hinzugefügt
+              className="btn btn-success btn-lg rounded-pill mt-4 w-100 mb-3"
               onClick={() => {
                 setGamePhase('start');
                 setPlayerData(null);
@@ -370,12 +364,12 @@ function App() {
                 setPlayerName('');
                 setCurrentRoll(null);
                 setIsGameOver(false);
-                setIsStartField(true); // Zurücksetzen des Zustands beim Neustart
-                
+                setIsStartField(true);
+
                 // Setze alle Felder außer dem Startfeld auf nicht aufgedeckt
                 const initialGameBoard = STATIC_GAME_BOARD.map((field, index) => ({
                   ...field,
-                  isRevealed: index === 0 ? true : false 
+                  isRevealed: index === 0 ? true : false
                 }));
                 setGameBoard(initialGameBoard);
               }}
@@ -383,7 +377,7 @@ function App() {
               Neues Spiel starten
             </button>
             <button
-              className="btn btn-info btn-lg w-100 rounded-pill" // NEU: Regeln-Button im Game Over Bildschirm
+              className="btn btn-info btn-lg w-100 rounded-pill"
               onClick={handleShowRules}
             >
               Regeln anzeigen
@@ -405,7 +399,7 @@ function App() {
         />
       )}
 
-      {/* NEU: Regeln-Modal */}
+      {/* Regeln-Modal */}
       {showRulesModal && (
         <RulesModal
           isOpen={showRulesModal}
@@ -418,4 +412,3 @@ function App() {
 }
 
 export default App;
-

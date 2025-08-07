@@ -4,15 +4,15 @@ import Dice from './Dice.jsx';
 
 const Board = ({ fields, playerPosition, onRollDice, diceValue, isRolling, isStartField }) => {
   // Helferfunktion, um die Klasse für jedes Feld zu bestimmen
-  const getFieldColor = (field) => { // Index wird hier nicht mehr benötigt, da isRevealed im Feld selbst ist
+  const getFieldColor = (field) => { 
     // Wenn das Feld aufgedeckt ist, verwende seine spezifische Farbe
     if (field.isRevealed) {
       switch (field.type) {
-        case 'empty': return 'bg-secondary'; // Grau
-        case 'malware': return 'bg-danger'; // Rot
-        case 'question': return 'bg-warning'; // Gelb
-        case 'riddle': return 'bg-warning'; // Gelb
-        case 'goal': return 'bg-success'; // Grün
+        case 'empty': return 'bg-secondary'; 
+        case 'malware': return 'bg-danger'; 
+        case 'question': return 'bg-warning'; 
+        case 'riddle': return 'bg-warning'; 
+        case 'goal': return 'bg-success'; 
         default: return 'bg-secondary';
       }
     } else {
@@ -40,7 +40,7 @@ const Board = ({ fields, playerPosition, onRollDice, diceValue, isRolling, isSta
         {index === 0 && !isStartField && (
           <div className="goal-icon-container d-flex flex-column align-items-center">
             <i className="fas fa-flag-checkered text-dark"></i>
-            <span className="goal-text text-dark">ZIEL</span> {/* Optional: "ZIEL" Text für das Zielfeld */}
+            <span className="goal-text text-dark">ZIEL</span> 
           </div>
         )}
         
