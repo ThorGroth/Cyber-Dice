@@ -3,20 +3,34 @@
 /* Globale Stile für die App */
 body {
   font-family: "Inter", sans-serif;
-  background-color: #f8f9fa; /* Heller Hintergrund */
+  background-color: #f8f9fa; 
 }
 
 .game-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  /* Hinzugefügt: position: relative, damit absolut positionierte Kinder sich daran orientieren */
   position: relative; 
 }
 
 header h1 {
-  color: #007bff; /* Primärfarbe für den Titel */
+  color: #007bff; 
 }
+
+/* Stile für das Modal-Overlay, damit es den ganzen Bildschirm bedeckt */
+.modal-overlay {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); 
+  z-index: 1050;
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+}
+
 
 .start-screen, .game-over-screen {
   position: fixed;
@@ -87,8 +101,7 @@ header h1 {
   box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
 }
 
-/* Modal-Anpassungen (Allgemein) */
-/* Diese Regeln gelten für alle Modale, sofern nicht von spezifischeren Regeln überschrieben */
+/* Modal-Anpassungen */
 .modal-content {
   padding: 30px;
   border-radius: 15px;
@@ -96,16 +109,16 @@ header h1 {
   max-width: 500px;
   width: 90%;
   text-align: center;
-  position: relative;
+  position: relative; 
   animation: fadeIn 0.3s ease-out;
-  background-color: #ffffff; /* Standard-Hintergrundfarbe, falls keine spezifische gesetzt ist */
-  color: #333; /* Standard-Textfarbe */
-  border: none; /* Entfernt den Standard-Border des Bootstrap-Modals */
+  background-color: #ffffff; 
+  color: #333; 
+  border: none; 
 }
 
 .modal-header {
   margin-bottom: 20px;
-  border-bottom: none; /* Entfernt den Standard-Border des Bootstrap-Modals */
+  border-bottom: none; 
 }
 
 .modal-header h2 {
@@ -192,30 +205,30 @@ header h1 {
 
 /* --- SPEZIFISCHE ANPASSUNGEN FÜR MALWARE MODAL --- */
 .modal-malware.modal-content { 
-  background-color: #dc3545; /* Hintergrund des Modals rot */
-  border: 2px solid #a71d2a; /* Dunklerer roter Rand */
-  color: white; /* Textfarbe weiß für bessere Lesbarkeit */
+  background-color: #dc3545; 
+  border: 2px solid #a71d2a; 
+  color: white; 
 }
 
 .modal-malware .modal-header h2 {
-  color: white; /* Überschrift weiß */
+  color: white; 
   font-size: 2.2rem;
   font-weight: bold;
 }
 
 .modal-malware .modal-body p {
-  color: white; /* Absatztext weiß */
+  color: white; 
   font-size: 1.2rem;
   font-weight: bold;
 }
 
 .modal-malware .modal-input {
-  background-color: rgba(255, 255, 255, 0.8); /* Hellerer Hintergrund für Input-Feld */
-  color: #333; /* Dunklerer Text für Input-Feld */
+  background-color: rgba(255, 255, 255, 0.8); 
+  color: #333; 
 }
 
 .modal-malware .modal-button.danger { 
-  background-color: #ff0000; /* Leuchtendes Rot für Button */
+  background-color: #ff0000; 
   color: white;
   padding: 12px 25px;
   font-size: 1.1rem;
@@ -229,7 +242,7 @@ header h1 {
 }
 
 .modal-malware .modal-close-button { 
-  color: white; /* Schließen-Button weiß */
+  color: white; 
 }
 .modal-malware .modal-close-button:hover {
   color: #f8f8f8;
@@ -239,30 +252,30 @@ header h1 {
 /* --- SPEZIFISCHE ANPASSUNGEN FÜR QUESTION/RIDDLE MODAL --- */
 .modal-question.modal-content, 
 .modal-riddle.modal-content { 
-  background-color: #ffc107; /* Hintergrund des Modals gelb/orange */
-  border: 2px solid #e0a800; /* Dunklerer gelber/oranger Rand */
-  color: #333; /* Textfarbe dunkel für bessere Lesbarkeit auf hellem Hintergrund */
+  background-color: #ffc107; 
+  border: 2px solid #e0a800;
+  color: #333; 
 }
 
 .modal-question .modal-header h2,
 .modal-riddle .modal-header h2 {
-  color: #333; /* Überschrift dunkel */
+  color: #333; 
 }
 
 .modal-question .modal-body p,
 .modal-riddle .modal-body p {
-  color: #333; /* Absatztext dunkel */
+  color: #333; 
 }
 
 .modal-question .modal-input,
 .modal-riddle .modal-input {
-  background-color: rgba(255, 255, 255, 0.8); /* Hellerer Hintergrund für Input-Feld */
-  color: #333; /* Dunklerer Text für Input-Feld */
+  background-color: rgba(255, 255, 255, 0.8); 
+  color: #333;
 }
 
 .modal-question .modal-button.primary,
 .modal-riddle .modal-button.primary {
-  background-color: #e0a800; /* Angepasster gelber/oranger Button */
+  background-color: #e0a800; 
   color: white;
 }
 
@@ -274,41 +287,41 @@ header h1 {
 
 .modal-question .modal-close-button,
 .modal-riddle .modal-close-button {
-  color: #333; /* Schließen-Button dunkel */
+  color: #333; 
 }
 .modal-question .modal-close-button:hover,
 .modal-riddle .modal-close-button:hover {
   color: #000;
 }
 
-/* Feedback-Nachrichten im Modal (spezifisch für Frage/Rätsel) */
+/* Feedback-Nachrichten im Modal */
 .modal-question .modal-feedback.success,
 .modal-riddle .modal-feedback.success { 
-  color: #28a745; /* Grün für Erfolg */
+  color: #28a745; 
 }
 .modal-question .modal-feedback.error,
 .modal-riddle .modal-feedback.error { 
-  color: #dc3545; /* Rot für Fehler */
+  color: #dc3545; 
 }
 
 /* Regeln-Modal spezifische Stile */
 .rules-modal-content {
-  background-color: #ffffff !important; /* Hintergrund auf Weiß gesetzt und mit !important erzwungen */
-  border: 2px solid #6c757d; /* Grauer Rand */
+  background-color: #ffffff !important; 
+  border: 2px solid #6c757d; 
   color: #333;
-  text-align: left; /* Text linksbündig für bessere Lesbarkeit der Regeln */
+  text-align: left; 
 }
 
 .rules-modal-content .modal-header h2 {
-  color: #007bff; /* Blau für Regeln-Überschrift */
+  color: #007bff; 
 }
 
 .rules-modal-content .modal-body p {
   color: #333;
-  white-space: pre-wrap; /* Behält Zeilenumbrüche und Leerzeichen bei */
-  max-height: 400px; /* Max. Höhe, um Scrollen zu ermöglichen */
-  overflow-y: auto; /* Scrollbalken, wenn Inhalt zu lang */
-  padding-right: 10px; /* Platz für Scrollbalken */
+  white-space: pre-wrap; 
+  max-height: 400px; 
+  overflow-y: auto; 
+  padding-right: 10px; 
 }
 
 .rules-modal-content .modal-button.primary {
@@ -326,18 +339,18 @@ header h1 {
   color: #333;
 }
 
-
+/* Stile für den Header oben mittig */
 .header-top-center {
   position: absolute; 
-  top: 1rem; /* Abstand vom oberen Rand */
-  left: 50%; /* 50% von links */
-  transform: translateX(-50%); /* Um die Hälfte seiner eigenen Breite nach links verschieben */
-  z-index: 50; /* Sicherstellen, dass es über anderen Elementen liegt */
-  width: auto; /* Breite basierend auf Inhalt */
-  white-space: nowrap; /* Verhindert Zeilenumbruch, wenn der Text kurz ist */
+  top: 1rem; 
+  left: 50%; 
+  transform: translateX(-50%); 
+  z-index: 50; 
+  width: auto; 
+  white-space: nowrap; 
 }
 
 /* Anpassung für den header-Tag innerhalb von header-top-center, falls nötig */
 .header-top-center header {
-    margin-bottom: 0 !important; /* Entfernt den mb-4 von Bootstrap, der den Header nach unten verschiebt */
+    margin-bottom: 0 !important;
 }
