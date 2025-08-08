@@ -54,7 +54,19 @@ const Board = ({ fields, playerPosition, onRollDice, diceValue, isRolling, isSta
 
         {/* Spieler-Token wird nur gerendert, wenn der Spieler auf diesem Feld ist */}
         {isPlayerHere && (
-          <div className="player-token player-1 bg-info rounded-circle d-flex align-items-center justify-content-center shadow-sm">
+          <div
+            className="player-token player-1 bg-info rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+            style={{
+              position: 'absolute',
+              bottom: '4px',
+              right: '4px',
+              width: '30px',
+              height: '30px',
+              fontWeight: 'bold',
+              fontSize: '0.8rem',
+              zIndex: 10
+            }}
+          >
             P1
           </div>
         )}
@@ -69,11 +81,19 @@ const Board = ({ fields, playerPosition, onRollDice, diceValue, isRolling, isSta
         className="dice-center-field"
         onClick={onRollDice}
         disabled={isRolling}
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 20,
+          background: 'transparent',
+          border: 'none'
+        }}
       >
         <Dice value={diceValue} isRolling={isRolling} />
       </button>
 
-      {/* Alle 30 Felder werden in einer Schleife gerendert. */}
       {fields.map((field, index) => renderField(field, index))}
     </div>
   );

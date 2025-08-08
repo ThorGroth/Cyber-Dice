@@ -45,9 +45,10 @@ const API_BASE_URL = 'http://localhost:8000';
 function App() {
   const [playerName, setPlayerName] = useState('');
   const [playerData, setPlayerData] = useState(null);
-  const [gameBoard, setGameBoard] = useState(STATIC_GAME_BOARD);
+  const [gameBoard, setGameBoard] = useState([]);
   const [gameMessage, setGameMessage] = useState('');
   const [currentRoll, setCurrentRoll] = useState(null);
+  const [isRolling, setIsRolling] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
   const [gamePhase, setGamePhase] = useState('start');
   const [isStartField, setIsStartField] = useState(true);
@@ -64,7 +65,7 @@ function App() {
 
   const handleStartGame = async () => {
     if (!playerName.trim()) {
-      setGameMessage("Bitte gib einen Spielernamen ein.");
+      setGameMessage('Bitte gib deinen Spielernamen ein.');
       return;
     }
     try {
@@ -101,9 +102,9 @@ function App() {
     }
   };
 
-  const handleRollDice = async () => {
-    if (isGameOver) {
-      setGameMessage("Das Spiel ist beendet. Starte ein neues Spiel.");
+  const rollDice = () => {
+    if (!playerData || !playerData.id) {
+      setGameMessage('Bitte starte zuerst das Spiel.');
       return;
     }
     try {
@@ -238,11 +239,8 @@ function App() {
   };
 
   return (
-    <div className="container-fluid p-4 game-container">
-      <header className="text-center mb-4">
-        <h1 className="display-4 text-primary">CyberDice</h1>
-        <p className="lead text-muted">Das IT-Quiz-Würfelspiel</p>
-      </header>
+    <div className="app-container">
+      <h1>Cyber Dice Game</h1>
 
       {/* Startbildschirm */}
       {gamePhase === 'start' && (
@@ -412,3 +410,4 @@ function App() {
 }
 
 export default App;
+
