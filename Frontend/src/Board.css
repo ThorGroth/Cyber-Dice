@@ -1,73 +1,18 @@
 /* Globale Stile für den Board-Container */
 .board-grid-container {
   display: grid;
-  /* 9 Spalten und 8 Reihen mit einer festen Größe, um gleichmäßige Vierecke zu erzwingen */
-  grid-template-columns: repeat(9, 80px); /* Jede Spalte 80px breit */
-  grid-template-rows: repeat(8, 80px); /* Jede Reihe 80px hoch */
-  /* Lücken zwischen den Grid-Zellen */
+  grid-template-columns: repeat(9, 80px);
+  grid-template-rows: repeat(8, 80px);
   gap: 2px;
-  /* Die Gesamtbreite und Höhe des Containers berechnen */
   width: calc(9 * 80px + 8 * 2px);
   height: calc(8 * 80px + 7 * 2px);
   margin: auto;
   position: relative;
-  /* Padding, um einen Rand zum äußeren Container zu schaffen */
   padding: 0;
   border: 2px solid #333;
   border-radius: 10px;
   background-color: #f0f0f0;
 }
-
-/* Wichtig: Positioniere den Würfel über dem inneren Bereich */
-.dice-center-field {
-  grid-area: 2 / 2 / span 6 / span 7;
-  background-color: transparent;
-  border: none;
-  z-index: 5;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* --- Positionierung der 32 Felder im 9x8 Grid --- */
-/* Obere Reihe (9 Felder) */
-.board-grid-container > :nth-child(2) { grid-area: 1 / 1; }
-.board-grid-container > :nth-child(3) { grid-area: 1 / 2; }
-.board-grid-container > :nth-child(4) { grid-area: 1 / 3; }
-.board-grid-container > :nth-child(5) { grid-area: 1 / 4; }
-.board-grid-container > :nth-child(6) { grid-area: 1 / 5; }
-.board-grid-container > :nth-child(7) { grid-area: 1 / 6; }
-.board-grid-container > :nth-child(8) { grid-area: 1 / 7; }
-.board-grid-container > :nth-child(9) { grid-area: 1 / 8; }
-.board-grid-container > :nth-child(10) { grid-area: 1 / 9; }
-
-/* Rechte Seite (7 Felder) */
-.board-grid-container > :nth-child(11) { grid-area: 2 / 9; }
-.board-grid-container > :nth-child(12) { grid-area: 3 / 9; }
-.board-grid-container > :nth-child(13) { grid-area: 4 / 9; }
-.board-grid-container > :nth-child(14) { grid-area: 5 / 9; }
-.board-grid-container > :nth-child(15) { grid-area: 6 / 9; }
-.board-grid-container > :nth-child(16) { grid-area: 7 / 9; }
-.board-grid-container > :nth-child(17) { grid-area: 8 / 9; }
-
-/* Untere Reihe (9 Felder) */
-.board-grid-container > :nth-child(18) { grid-area: 8 / 8; }
-.board-grid-container > :nth-child(19) { grid-area: 8 / 7; }
-.board-grid-container > :nth-child(20) { grid-area: 8 / 6; }
-.board-grid-container > :nth-child(21) { grid-area: 8 / 5; }
-.board-grid-container > :nth-child(22) { grid-area: 8 / 4; }
-.board-grid-container > :nth-child(23) { grid-area: 8 / 3; }
-.board-grid-container > :nth-child(24) { grid-area: 8 / 2; }
-.board-grid-container > :nth-child(25) { grid-area: 8 / 1; }
-
-/* Linke Seite (7 Felder) */
-.board-grid-container > :nth-child(26) { grid-area: 7 / 1; }
-.board-grid-container > :nth-child(27) { grid-area: 6 / 1; }
-.board-grid-container > :nth-child(28) { grid-area: 5 / 1; }
-.board-grid-container > :nth-child(29) { grid-area: 4 / 1; }
-.board-grid-container > :nth-child(30) { grid-area: 3 / 1; }
-.board-grid-container > :nth-child(31) { grid-area: 2 / 1; }
 
 /* --- Styling der Spielfelder --- */
 .field {
@@ -77,7 +22,7 @@
   border-radius: 8px;
   font-weight: bold;
   font-size: 0.8rem;
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease-in-out;
   display: flex;
   align-items: center;
@@ -86,7 +31,7 @@
 }
 
 .field:hover {
-    transform: translateY(-2px);
+  transform: translateY(-2px);
 }
 
 /* Farben für die Felder */
@@ -97,19 +42,69 @@
 
 /* Spieler-Token */
 .player-token {
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
-    width: 25px;
-    height: 25px;
-    font-size: 0.7rem;
-    color: white;
-    z-index: 10;
-    border: 1px solid rgba(255,255,255,0.5);
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 25px;
+  height: 25px;
+  font-size: 0.7rem;
+  color: white;
+  z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 /* Icons auf den Feldern */
 .field i {
-    font-size: 1.2rem;
-    margin-bottom: 3px;
+  font-size: 1.2rem;
+  margin-bottom: 3px;
 }
+
+/* Dice Button mittig */
+.dice-center-field {
+  grid-area: 2 / 2 / span 6 / span 7;
+  background-color: transparent;
+  border: none;
+  z-index: 5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+/* --- Positionierung der 32 Felder (ausgehend vom ersten Grid-Feld) --- */
+/* Felder beginnen ab nth-child(2) wegen Würfelfeld */
+.board-grid-container > :nth-child(2) { grid-area: 1 / 1; }
+.board-grid-container > :nth-child(3) { grid-area: 1 / 2; }
+.board-grid-container > :nth-child(4) { grid-area: 1 / 3; }
+.board-grid-container > :nth-child(5) { grid-area: 1 / 4; }
+.board-grid-container > :nth-child(6) { grid-area: 1 / 5; }
+.board-grid-container > :nth-child(7) { grid-area: 1 / 6; }
+.board-grid-container > :nth-child(8) { grid-area: 1 / 7; }
+.board-grid-container > :nth-child(9) { grid-area: 1 / 8; }
+.board-grid-container > :nth-child(10) { grid-area: 1 / 9; }
+
+.board-grid-container > :nth-child(11) { grid-area: 2 / 9; }
+.board-grid-container > :nth-child(12) { grid-area: 3 / 9; }
+.board-grid-container > :nth-child(13) { grid-area: 4 / 9; }
+.board-grid-container > :nth-child(14) { grid-area: 5 / 9; }
+.board-grid-container > :nth-child(15) { grid-area: 6 / 9; }
+.board-grid-container > :nth-child(16) { grid-area: 7 / 9; }
+.board-grid-container > :nth-child(17) { grid-area: 8 / 9; }
+
+.board-grid-container > :nth-child(18) { grid-area: 8 / 8; }
+.board-grid-container > :nth-child(19) { grid-area: 8 / 7; }
+.board-grid-container > :nth-child(20) { grid-area: 8 / 6; }
+.board-grid-container > :nth-child(21) { grid-area: 8 / 5; }
+.board-grid-container > :nth-child(22) { grid-area: 8 / 4; }
+.board-grid-container > :nth-child(23) { grid-area: 8 / 3; }
+.board-grid-container > :nth-child(24) { grid-area: 8 / 2; }
+.board-grid-container > :nth-child(25) { grid-area: 8 / 1; }
+
+.board-grid-container > :nth-child(26) { grid-area: 7 / 1; }
+.board-grid-container > :nth-child(27) { grid-area: 6 / 1; }
+.board-grid-container > :nth-child(28) { grid-area: 5 / 1; }
+.board-grid-container > :nth-child(29) { grid-area: 4 / 1; }
+.board-grid-container > :nth-child(30) { grid-area: 3 / 1; }
+.board-grid-container > :nth-child(31) { grid-area: 2 / 1; }
+.board-grid-container > :nth-child(32) { grid-area: 2 / 2 / span 6 / span 7; pointer-events: none; } /* Dice-Button bleibt mittig */

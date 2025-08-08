@@ -51,25 +51,16 @@ def apply_event(player: Player, field: dict):
     if field_type == "malware":
         effect = field.get("effect", -1)
         player.data_points += effect
-        print(f"Malware-Ereignis: {field['description']}")
 
     elif field_type in ["question", "riddle"]:
-        print(f"Frage: {field.get('question')}")
-        user_input = input("Antwort: ").strip().lower()
-        correct_answer = field.get("answer", "").strip().lower()
-
-        if user_input == correct_answer:
-            reward = field.get("reward", 1)
-            player.data_points += reward
-            print(f"Richtig! Du erhältst {reward} Datenpunkt(e).")
-        else:
-            print("Falsch beantwortet. Kein Bonus.")
+        # Frage wird nicht mehr im Backend verarbeitet
+        # Frontend soll Feld anzeigen und Antwort via /answer prüfen
+        pass
 
     elif field_type == "empty":
-        print(field.get("description", "Leeres Feld."))
+        # Keine Änderung notwendig
+        pass
 
     elif field_type == "goal":
-        print("Ziel erreicht, Glückwunsch!")
-
-    else:
-        print("Unbekannter Feldtyp.")
+        # Spielende erreicht
+        pass

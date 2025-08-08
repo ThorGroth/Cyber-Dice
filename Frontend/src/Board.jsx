@@ -2,14 +2,14 @@ import React from 'react';
 import './Board.css';
 import Dice from './Dice.jsx';
 
-const Board = ({ fields, playerPosition, onRollDice, diceValue, isRolling }) => {
+const Board = ({ fields = [], playerPosition, onRollDice, diceValue, isRolling }) => {
   const getFieldColor = (field) => {
     switch (field.type) {
-      case 'empty': return 'bg-secondary'; // Grau
-      case 'malware': return 'bg-danger'; // Rot
-      case 'question': return 'bg-warning'; // Gelb
-      case 'riddle': return 'bg-warning'; // Gelb 
-      case 'goal': return 'bg-success'; // Grün
+      case 'empty': return 'bg-secondary';
+      case 'malware': return 'bg-danger';
+      case 'question': return 'bg-warning';
+      case 'riddle': return 'bg-warning';
+      case 'goal': return 'bg-success';
       default: return 'bg-secondary';
     }
   };
@@ -29,7 +29,19 @@ const Board = ({ fields, playerPosition, onRollDice, diceValue, isRolling }) => 
         {field.type === 'empty' && <i className="fas fa-circle text-dark"></i>}
 
         {isPlayerHere && (
-          <div className="player-token player-1 bg-info rounded-circle d-flex align-items-center justify-content-center shadow-sm">
+          <div
+            className="player-token player-1 bg-info rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+            style={{
+              position: 'absolute',
+              bottom: '4px',
+              right: '4px',
+              width: '30px',
+              height: '30px',
+              fontWeight: 'bold',
+              fontSize: '0.8rem',
+              zIndex: 10
+            }}
+          >
             P1
           </div>
         )}
@@ -38,17 +50,25 @@ const Board = ({ fields, playerPosition, onRollDice, diceValue, isRolling }) => 
   };
 
   return (
-    <div className="board-grid-container">
-      {/* Das Würfelfeld ist ein Klick-Element in der Mitte */}
-      <button 
+    <div className="board-grid-container position-relative">
+      {/* Würfel zentriert über dem Grid */}
+      <button
         className="dice-center-field"
         onClick={onRollDice}
         disabled={isRolling}
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 20,
+          background: 'transparent',
+          border: 'none'
+        }}
       >
         <Dice value={diceValue} isRolling={isRolling} />
       </button>
 
-      {/* Alle 30 Felder werden in einer Schleife gerendert. */}
       {fields.map((field, index) => renderField(field, index))}
     </div>
   );
